@@ -1,0 +1,49 @@
+<section class="auth-screen">
+  <header class="auth-hero reveal-up">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="ui-kicker">Love Spa / Account</p>
+      <h1>Welcome Back</h1>
+      <p>Sign in to access your appointments, preferred treatments, and wellness journey.</p>
+    </div>
+  </header>
+
+  <div class="auth-wrap">
+    <aside class="auth-side ui-surface reveal-up delay-1">
+      <p class="ui-kicker">Member Access</p>
+      <h2>Luxury care, tailored to you</h2>
+      <p>Review bookings, track upcoming sessions, and enjoy smooth appointment management.</p>
+    </aside>
+
+    <section class="auth-page ui-surface reveal-up delay-2">
+      <h2>Sign In</h2>
+      <form [formGroup]="loginForm" (ngSubmit)="submit()">
+        <label>
+          Email
+          <input type="email" class="ui-input" formControlName="email" placeholder="you@example.com" />
+          @if (f.email.touched && f.email.invalid) {
+          <small>Email is required.</small>
+          }
+        </label>
+
+        <label>
+          Password
+          <input type="password" class="ui-input" formControlName="password" placeholder="********" />
+          @if (f.password.touched && f.password.invalid) {
+          <small>Password must be at least 8 characters.</small>
+          }
+        </label>
+
+        @if (errorMessage) {
+        <p class="ui-state ui-state-error">{{ errorMessage }}</p>
+        }
+
+        <button type="submit" class="ui-btn ui-btn-primary" [disabled]="loading">
+          {{ loading ? 'Signing In...' : 'Sign In' }}
+        </button>
+      </form>
+
+      <p class="helper">New customer? <a routerLink="/register">Create account</a></p>
+    </section>
+  </div>
+</section>

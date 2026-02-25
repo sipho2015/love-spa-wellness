@@ -1,0 +1,84 @@
+<section class="dashboard dashboard--staff">
+  <header class="dashboard-hero reveal-up">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="ui-kicker">Staff Dashboard</p>
+      <h1>Your Treatment Schedule</h1>
+      <p>Manage client appointments and keep every session status updated in real time.</p>
+    </div>
+    <button type="button" class="ui-btn ui-btn-muted refresh-btn" (click)="refresh()">Refresh</button>
+  </header>
+
+  <section class="summary ui-surface reveal-up delay-1">
+    <p class="ui-kicker">Daily Workflow</p>
+    <h2>{{ appointments.length }} Appointments Assigned</h2>
+    <p>Update customer status after each treatment to keep operations aligned.</p>
+  </section>
+
+  @if (updateMessage) {
+  <p class="ui-state ui-state-success">{{ updateMessage }}</p>
+  }
+
+  @if (assignmentNotice) {
+  <p class="ui-state ui-state-success assignment-notice">{{ assignmentNotice }}</p>
+  }
+
+  @if (loading) {
+  <p class="ui-state">Loading your schedule...</p>
+  } @else if (errorMessage) {
+  <p class="ui-state ui-state-error">{{ errorMessage }}</p>
+  } @else if (appointments.length === 0) {
+  @if (isTherapistLinked === false) {
+  <p class="ui-state ui-state-error">
+    No appointments are visible because this staff account is not linked to a therapist profile.
+    Ask admin to link it under Therapist Management.
+  </p>
+  } @else {
+  <p class="ui-state">
+    No appointments assigned yet. If assignments exist, ask admin to link your staff account to your therapist profile.
+  </p>
+  }
+  } @else {
+  <div class="table-wrap ui-surface reveal-up delay-2">
+    <table class="ui-table">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Service</th>
+          <th>Date</th>
+          <th>Time Slot</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (appointment of appointments; track appointment.id) {
+        <tr>
+          <td>
+            {{ appointment.customerName }}
+            <div class="phone">{{ appointment.customerPhone }}</div>
+            @if (appointment.allergies || appointment.healthConcerns) {
+            <div class="intake-tag">Intake form submitted</div>
+            }
+          </td>
+          <td>{{ appointment.serviceName }}</td>
+          <td>{{ appointment.appointmentDate | date : 'mediumDate' }}</td>
+          <td>{{ appointment.timeSlot }}</td>
+          <td>
+            <select
+              class="ui-input status-select"
+              [value]="appointment.status"
+              [disabled]="updatingAppointmentId === appointment.id"
+              (change)="updateStatus(appointment.id, $any($event.target).value)"
+            >
+              @for (status of statuses; track status) {
+              <option [value]="status">{{ status }}</option>
+              }
+            </select>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</section>

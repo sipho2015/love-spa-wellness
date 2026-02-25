@@ -1,0 +1,32 @@
+<svg width="960" height="720" viewBox="0 0 960 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="r1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(640 180) rotate(90) scale(220 260)">
+      <stop stop-color="#F3D6C8" stop-opacity="0.7"/>
+      <stop offset="1" stop-color="#F3D6C8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="stone" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#CDA79E" stop-opacity="0.52"/>
+      <stop offset="1" stop-color="#A96A74" stop-opacity="0.43"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#D7A8AA" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#B6778E" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="960" height="720" fill="#FFF9F4"/>
+  <ellipse cx="640" cy="180" rx="260" ry="220" fill="url(#r1)"/>
+
+  <ellipse cx="700" cy="478" rx="124" ry="74" fill="url(#stone)"/>
+  <ellipse cx="564" cy="540" rx="156" ry="92" fill="url(#stone)"/>
+  <ellipse cx="760" cy="572" rx="95" ry="56" fill="url(#stone)"/>
+
+  <path d="M320 428C440 368 590 360 726 404" stroke="url(#wave)" stroke-width="2"/>
+  <path d="M288 486C420 428 600 418 744 462" stroke="url(#wave)" stroke-width="1.8"/>
+  <path d="M260 550C412 498 620 490 776 536" stroke="url(#wave)" stroke-width="1.5"/>
+  <path d="M232 614C404 566 636 558 804 606" stroke="url(#wave)" stroke-width="1.2"/>
+
+  <circle cx="234" cy="200" r="58" fill="#F4DED0" fill-opacity="0.36"/>
+  <circle cx="186" cy="262" r="16" fill="#D8ADB1" fill-opacity="0.42"/>
+  <circle cx="230" cy="310" r="12" fill="#C18A98" fill-opacity="0.38"/>
+</svg>

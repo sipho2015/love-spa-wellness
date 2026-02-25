@@ -1,0 +1,169 @@
+@if (state$ | async; as state) {
+@if (state.isOpen) {
+<div class="auth-modal-backdrop" (click)="onBackdropClick($event)">
+  <section class="auth-modal ui-surface" role="dialog" aria-modal="true" aria-label="Account access">
+    <button type="button" class="close-btn" aria-label="Close" (click)="close()">&times;</button>
+
+    <div class="mode-tabs">
+      <button type="button" [class.active]="state.mode === 'login'" (click)="switchMode('login')">Login</button>
+      <button type="button" [class.active]="state.mode === 'register'" (click)="switchMode('register')">Create Account</button>
+      <button type="button" [class.active]="state.mode === 'forgot'" (click)="switchMode('forgot')">Forgot Password</button>
+    </div>
+
+    @if (state.mode === 'login') {
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Sign in to access your dashboard and booking history.</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="submitLogin()">
+      <label>
+        Email
+        <input type="email" class="ui-input" formControlName="email" placeholder="you@example.com" />
+      </label>
+
+      <label>
+        Password
+        <input type="password" class="ui-input" formControlName="password" placeholder="********" />
+      </label>
+
+      <button type="button" class="text-link" (click)="switchMode('forgot')">Forgot password?</button>
+
+      @if (errorMessage) {
+      <p class="ui-state ui-state-error">{{ errorMessage }}</p>
+      }
+
+      @if (successMessage) {
+      <p class="ui-state ui-state-success">{{ successMessage }}</p>
+      }
+
+      <button type="submit" class="ui-btn ui-btn-primary auth-submit" [disabled]="loading">
+        {{ loading ? 'Signing In...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <p class="helper">New here? <button type="button" class="text-link" (click)="switchMode('register')">Create an account</button></p>
+    }
+
+    @if (state.mode === 'register') {
+    <h2>Create Your Account</h2>
+    <p class="subtitle">Set up your profile to manage bookings and appointments.</p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
+      <label>
+        Full Name
+        <input type="text" class="ui-input" formControlName="fullName" placeholder="Jane Customer" />
+      </label>
+
+      <label>
+        Email
+        <input type="email" class="ui-input" formControlName="email" placeholder="you@example.com" />
+      </label>
+
+      <label>
+        Password
+        <input type="password" class="ui-input" formControlName="password" placeholder="At least 8 characters" />
+      </label>
+
+      <label>
+        Confirm Password
+        <input type="password" class="ui-input" formControlName="confirmPassword" placeholder="Repeat password" />
+      </label>
+
+      @if (registerForm.touched && registerForm.hasError('passwordMismatch')) {
+      <p class="ui-state ui-state-error">Passwords must match.</p>
+      }
+
+      @if (errorMessage) {
+      <p class="ui-state ui-state-error">{{ errorMessage }}</p>
+      }
+
+      @if (successMessage) {
+      <p class="ui-state ui-state-success">{{ successMessage }}</p>
+      }
+
+      <button type="submit" class="ui-btn ui-btn-primary auth-submit" [disabled]="loading">
+        {{ loading ? 'Creating Account...' : 'Create Account' }}
+      </button>
+    </form>
+
+    <p class="helper">Already registered? <button type="button" class="text-link" (click)="switchMode('login')">Sign in</button></p>
+    }
+
+    @if (state.mode === 'forgot') {
+    <h2>Reset Your Password</h2>
+    <p class="subtitle">Enter your email to receive a password reset token.</p>
+
+    <form [formGroup]="forgotPasswordForm" (ngSubmit)="submitForgotPassword()">
+      <label>
+        Email
+        <input type="email" class="ui-input" formControlName="email" placeholder="you@example.com" />
+      </label>
+
+      @if (errorMessage) {
+      <p class="ui-state ui-state-error">{{ errorMessage }}</p>
+      }
+
+      @if (successMessage) {
+      <p class="ui-state ui-state-success">{{ successMessage }}</p>
+      }
+
+      <button type="submit" class="ui-btn ui-btn-primary auth-submit" [disabled]="loading">
+        {{ loading ? 'Submitting...' : 'Send Reset Request' }}
+      </button>
+    </form>
+    }
+
+    @if (state.mode === 'reset') {
+    <h2>Set New Password</h2>
+    <p class="subtitle">Paste your reset token and create a new password.</p>
+
+    <form [formGroup]="resetPasswordForm" (ngSubmit)="submitResetPassword()">
+      <label>
+        Reset Token
+        <input type="text" class="ui-input" formControlName="token" placeholder="Paste your reset token" />
+      </label>
+
+      <label>
+        New Password
+        <input type="password" class="ui-input" formControlName="newPassword" placeholder="At least 8 characters" />
+      </label>
+
+      <label>
+        Confirm New Password
+        <input
+          type="password"
+          class="ui-input"
+          formControlName="confirmNewPassword"
+          placeholder="Repeat new password"
+        />
+      </label>
+
+      @if (resetPasswordForm.touched && resetPasswordForm.hasError('passwordMismatch')) {
+      <p class="ui-state ui-state-error">Passwords must match.</p>
+      }
+
+      @if (developmentToken) {
+      <p class="dev-token">
+        Dev token:
+        <code>{{ developmentToken }}</code>
+      </p>
+      }
+
+      @if (errorMessage) {
+      <p class="ui-state ui-state-error">{{ errorMessage }}</p>
+      }
+
+      @if (successMessage) {
+      <p class="ui-state ui-state-success">{{ successMessage }}</p>
+      }
+
+      <button type="submit" class="ui-btn ui-btn-primary auth-submit" [disabled]="loading">
+        {{ loading ? 'Updating...' : 'Update Password' }}
+      </button>
+    </form>
+
+    <p class="helper">Back to login? <button type="button" class="text-link" (click)="switchMode('login')">Sign in</button></p>
+    }
+  </section>
+</div>
+}
+}

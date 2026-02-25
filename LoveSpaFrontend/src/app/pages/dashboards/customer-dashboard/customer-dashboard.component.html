@@ -1,0 +1,138 @@
+<section class="dashboard dashboard--customer">
+  <header class="dashboard-hero reveal-up">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="ui-kicker">Customer Dashboard</p>
+      <h1>Your Wellness Schedule</h1>
+      <p>Track your upcoming visits, treatment details, and booking statuses in one place.</p>
+    </div>
+    <button type="button" class="ui-btn ui-btn-muted refresh-btn" (click)="refresh()">Refresh</button>
+  </header>
+
+  <section class="summary ui-surface reveal-up delay-1">
+    <p class="ui-kicker">Booking Overview</p>
+    <h2>{{ appointments.length }} Appointments</h2>
+    <p>Stay updated on confirmed sessions and any schedule changes.</p>
+  </section>
+
+  @if (updateMessage) {
+  <p class="ui-state ui-state-success">{{ updateMessage }}</p>
+  }
+
+  @if (statusNotice) {
+  <p class="ui-state ui-state-success status-notice">{{ statusNotice }}</p>
+  }
+
+  @if (loading) {
+  <p class="ui-state">Loading your bookings...</p>
+  } @else if (errorMessage) {
+  <p class="ui-state ui-state-error">{{ errorMessage }}</p>
+  } @else if (appointments.length === 0) {
+  <p class="ui-state">You have no bookings yet.</p>
+  } @else {
+  <div class="table-wrap ui-surface reveal-up delay-2">
+    <table class="ui-table">
+      <thead>
+        <tr>
+          <th>Service</th>
+          <th>Therapist</th>
+          <th>Date</th>
+          <th>Time Slot</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (appointment of appointments; track appointment.id) {
+        <tr>
+          <td>{{ appointment.serviceName }}</td>
+          <td>{{ appointment.therapistName }}</td>
+          <td>{{ appointment.appointmentDate | date : 'mediumDate' }}</td>
+          <td>{{ appointment.timeSlot }}</td>
+          <td>
+            <span class="ui-badge" [class]="'ui-badge status-' + appointment.status.toLowerCase()">
+              {{ appointment.status }}
+            </span>
+          </td>
+          <td class="inline-actions">
+            <button
+              type="button"
+              class="ui-btn ui-btn-muted mini-btn"
+              [disabled]="!canManage(appointment) || actionLoadingId === appointment.id"
+              (click)="openRescheduleModal(appointment)"
+            >
+              Reschedule
+            </button>
+            <button
+              type="button"
+              class="ui-btn danger mini-btn"
+              [disabled]="!canManage(appointment) || actionLoadingId === appointment.id"
+              (click)="cancelBooking(appointment)"
+            >
+              Cancel
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+
+  @if (rescheduleTarget) {
+  <div class="reschedule-modal-backdrop" (click)="onRescheduleBackdropClick($event)">
+    <section class="reschedule-modal ui-surface" role="dialog" aria-modal="true" aria-label="Reschedule booking">
+      <header class="reschedule-header">
+        <h3>Reschedule Booking #{{ rescheduleTarget.id }}</h3>
+        <button type="button" class="close-btn" aria-label="Close" (click)="closeRescheduleModal()">&times;</button>
+      </header>
+
+      <p class="reschedule-copy">
+        {{ rescheduleTarget.serviceName }} with {{ rescheduleTarget.therapistName }}
+      </p>
+
+      <form [formGroup]="rescheduleForm" (ngSubmit)="submitReschedule()">
+        <label>
+          New Date
+          <input type="date" class="ui-input" formControlName="appointmentDate" [min]="minDate" />
+          @if (rf.appointmentDate.touched && rf.appointmentDate.invalid) {
+          <small>Select a valid date.</small>
+          }
+        </label>
+
+        <label>
+          New Time Slot
+          <input type="text" class="ui-input" formControlName="timeSlot" placeholder="Example: 11:00 AM - 12:00 PM" />
+          @if (rf.timeSlot.touched && rf.timeSlot.hasError('required')) {
+          <small>Time slot is required.</small>
+          } @else if (rf.timeSlot.touched && rf.timeSlot.hasError('maxlength')) {
+          <small>Time slot is too long.</small>
+          }
+        </label>
+
+        @if (rescheduleError) {
+        <p class="ui-state ui-state-error">{{ rescheduleError }}</p>
+        }
+
+        <div class="reschedule-actions">
+          <button
+            type="submit"
+            class="ui-btn ui-btn-primary mini-btn"
+            [disabled]="actionLoadingId === rescheduleTarget.id"
+          >
+            {{ actionLoadingId === rescheduleTarget.id ? 'Saving...' : 'Save Changes' }}
+          </button>
+          <button
+            type="button"
+            class="ui-btn ui-btn-muted mini-btn"
+            [disabled]="actionLoadingId === rescheduleTarget.id"
+            (click)="closeRescheduleModal()"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </section>
+  </div>
+  }
+</section>

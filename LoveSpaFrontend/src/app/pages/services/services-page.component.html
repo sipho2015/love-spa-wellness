@@ -1,0 +1,42 @@
+<section class="services-page">
+  <header class="services-hero reveal-up">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="ui-kicker">Love Spa / Services</p>
+      <h1>Signature Services for Total Renewal</h1>
+      <p>
+        Explore restorative body therapies, targeted wellness treatments, and luxury skin rituals
+        tailored to your needs.
+      </p>
+    </div>
+  </header>
+
+  @if (loading) {
+  <p class="ui-state">Loading services...</p>
+  } @else if (errorMessage) {
+  <p class="ui-state ui-state-error">{{ errorMessage }}</p>
+  } @else if (services.length === 0) {
+  <p class="ui-state">No active services available right now.</p>
+  } @else {
+  <div class="grid">
+    @for (service of services; track service.id; let i = $index) {
+    <article class="service-card reveal-up" [class.delay-1]="i % 3 === 1" [class.delay-2]="i % 3 === 2">
+      <div class="card-media">
+        <img [src]="cardImage(i)" [alt]="service.name + ' spa treatment'" />
+        <span class="price-badge">{{ service.price | currency : 'USD' }}</span>
+      </div>
+
+      <div class="card-content">
+        <p class="ui-kicker">Signature care</p>
+        <h2>{{ service.name }}</h2>
+        <p>{{ service.description }}</p>
+        <div class="meta">
+          <span>{{ service.durationMinutes }} mins</span>
+          <strong>Book This Service &rarr;</strong>
+        </div>
+      </div>
+    </article>
+    }
+  </div>
+  }
+</section>

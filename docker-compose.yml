@@ -1,0 +1,42 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: love-spa-sql
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "LoveSpaSql!2026"
+    ports:
+      - "1433:1433"
+    volumes:
+      - lovespa-sql-data:/var/opt/mssql
+
+  backend:
+    build:
+      context: .
+      dockerfile: LoveSpaBackend/Dockerfile
+    container_name: love-spa-backend
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=LoveSpaWellnessDb;User Id=sa;Password=LoveSpaSql!2026;TrustServerCertificate=True;Encrypt=False"
+      Jwt__Key: "LoveSpaWellnessSuperSecretJwtSigningKey_2026_KeepSafe"
+      Jwt__Issuer: "LoveSpaBackend"
+      Jwt__Audience: "LoveSpaFrontend"
+      Jwt__ExpiryMinutes: "120"
+      App__FrontendBaseUrl: "http://localhost:4200"
+    depends_on:
+      - sqlserver
+    ports:
+      - "5169:8080"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: LoveSpaFrontend/Dockerfile
+    container_name: love-spa-frontend
+    depends_on:
+      - backend
+    ports:
+      - "4200:80"
+
+volumes:
+  lovespa-sql-data:

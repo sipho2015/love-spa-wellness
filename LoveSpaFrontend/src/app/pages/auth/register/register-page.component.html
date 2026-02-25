@@ -1,0 +1,75 @@
+<section class="auth-screen">
+  <header class="auth-hero reveal-up">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="ui-kicker">Love Spa / Register</p>
+      <h1>Create Your Wellness Profile</h1>
+      <p>Join Love Spa to manage bookings, view treatment history, and enjoy a smooth spa journey.</p>
+    </div>
+  </header>
+
+  <div class="auth-wrap">
+    <aside class="auth-side ui-surface reveal-up delay-1">
+      <p class="ui-kicker">Member Benefits</p>
+      <h2>Personalized experience from day one</h2>
+      <p>Save preferences, book faster, and track appointments with a dedicated customer dashboard.</p>
+    </aside>
+
+    <section class="auth-page ui-surface reveal-up delay-2">
+      <h2>Create Account</h2>
+      <form [formGroup]="registerForm" (ngSubmit)="submit()">
+        <label>
+          Full Name
+          <input type="text" class="ui-input" formControlName="fullName" placeholder="Jane Customer" />
+          @if (f.fullName.touched && f.fullName.invalid) {
+          <small>Full name is required.</small>
+          }
+        </label>
+
+        <label>
+          Email
+          <input type="email" class="ui-input" formControlName="email" placeholder="you@example.com" />
+          @if (f.email.touched && f.email.invalid) {
+          <small>Valid email is required.</small>
+          }
+        </label>
+
+        <label>
+          Password
+          <input
+            type="password"
+            class="ui-input"
+            formControlName="password"
+            placeholder="At least 8 characters"
+          />
+          @if (f.password.touched && f.password.invalid) {
+          <small>Password must be at least 8 characters.</small>
+          }
+        </label>
+
+        <label>
+          Confirm Password
+          <input
+            type="password"
+            class="ui-input"
+            formControlName="confirmPassword"
+            placeholder="Repeat password"
+          />
+          @if (registerForm.touched && registerForm.hasError('passwordMismatch')) {
+          <small>Passwords must match.</small>
+          }
+        </label>
+
+        @if (errorMessage) {
+        <p class="ui-state ui-state-error">{{ errorMessage }}</p>
+        }
+
+        <button type="submit" class="ui-btn ui-btn-primary" [disabled]="loading">
+          {{ loading ? 'Creating Account...' : 'Create Account' }}
+        </button>
+      </form>
+
+      <p class="helper">Already registered? <a routerLink="/login">Sign in</a></p>
+    </section>
+  </div>
+</section>

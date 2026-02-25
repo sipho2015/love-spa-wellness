@@ -1,0 +1,248 @@
+<section class="home-page">
+  <section class="home-hero reveal-up">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="ui-kicker">Love Spa / Home</p>
+      <h1>Luxury Wellness Crafted Around You</h1>
+      <p>
+        Discover a calm modern sanctuary where massage therapy, skin rituals, and mindful recovery
+        are delivered with elegant care.
+      </p>
+      <div class="hero-actions">
+        <a routerLink="/booking" class="ui-btn ui-btn-primary">Book Your Session</a>
+        <a routerLink="/services" class="ui-btn ui-btn-muted">Explore Services</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="wellness-atmosphere">
+    <section class="why-section reveal-up delay-2" id="why">
+    <header>
+      <p class="ui-kicker">Why Choose Us</p>
+      <h2>Why clients keep coming back to Love Spa</h2>
+    </header>
+    <div class="why-grid">
+      <article class="why-card ui-surface">
+        <h3>Personalized Care</h3>
+        <p>Each treatment is adjusted to your comfort level, body condition, and wellness goals.</p>
+      </article>
+      <article class="why-card ui-surface">
+        <h3>Trusted Expertise</h3>
+        <p>Certified professionals deliver safe, consistent, and effective therapeutic sessions.</p>
+      </article>
+      <article class="why-card ui-surface">
+        <h3>Guest-First Experience</h3>
+        <p>Easy booking, transparent pricing, and optional account creation for new visitors.</p>
+      </article>
+    </div>
+    </section>
+
+    <section class="feature-grid">
+    <article class="feature-card ui-surface reveal-up delay-1">
+      <p class="ui-kicker">Expert Team</p>
+      <h2>Certified Therapists</h2>
+      <p>Skilled specialists focused on pain relief, deep relaxation, and long-term wellness.</p>
+    </article>
+
+    <article class="feature-card ui-surface reveal-up delay-2">
+      <p class="ui-kicker">Seamless Booking</p>
+      <h2>Easy Scheduling</h2>
+      <p>Book treatments in minutes with transparent pricing, therapist options, and live slots.</p>
+    </article>
+
+    <article class="feature-card ui-surface reveal-up delay-3">
+      <p class="ui-kicker">Client Favorite</p>
+      <h2>Signature Ritual</h2>
+      <p>Our 90-minute renewal ritual combines deep tissue, aromatherapy, and skin nourishment.</p>
+    </article>
+    </section>
+
+    <section class="experience-grid">
+    <article class="experience-card ui-surface reveal-up delay-1">
+      <p class="ui-kicker">Opening Hours</p>
+      <h2>Daily Wellness Access</h2>
+      <p>Mon - Fri: 9:00 AM - 8:00 PM</p>
+      <p>Sat - Sun: 10:00 AM - 6:00 PM</p>
+    </article>
+
+    <article class="experience-card experience-card--gold reveal-up delay-2">
+      <p class="ui-kicker">Your Next Escape</p>
+      <h2>Premium Spa Packages</h2>
+      <p>Combine treatments and save with curated luxury packages tailored to your goals.</p>
+      <a routerLink="/packages" class="ui-btn ui-btn-primary">View Packages</a>
+    </article>
+    </section>
+
+    <section class="policy-strip ui-surface reveal-up">
+    <p class="ui-kicker">Cancellation Policy</p>
+    <h2>Clear & Fair Booking Terms</h2>
+    <p>
+      Please provide at least <strong>24 hours notice</strong> for cancellations or rescheduling.
+      Late cancellations and missed appointments may incur a fee.
+    </p>
+    <a routerLink="/booking" class="ui-btn ui-btn-primary">Review Full Booking Details</a>
+    </section>
+
+    <section class="testimonials reveal-up delay-1">
+    <header>
+      <p class="ui-kicker">Testimonials</p>
+      <h2>What Clients Say</h2>
+    </header>
+
+    <article class="testimonial-card ui-surface">
+      <p class="quote">"{{ testimonials[activeTestimonialIndex].quote }}"</p>
+      <p class="author">{{ testimonials[activeTestimonialIndex].author }}</p>
+      <div class="carousel-actions">
+        <button type="button" class="ui-btn ui-btn-muted" (click)="prevTestimonial()">Previous</button>
+        <button type="button" class="ui-btn ui-btn-muted" (click)="nextTestimonial()">Next</button>
+      </div>
+      <div class="review-links">
+        <a href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Google Reviews</a>
+        <a href="https://www.yelp.com" target="_blank" rel="noopener noreferrer">Yelp</a>
+        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+      </div>
+    </article>
+    </section>
+
+    <section class="resources reveal-up delay-2" id="resources">
+    <header>
+      <p class="ui-kicker">Blog / Resources</p>
+      <h2>Wellness Insights From Our Team</h2>
+    </header>
+    <div class="resources-grid">
+      @for (item of resources; track item.title) {
+      <article class="resource-card ui-surface">
+        <p class="meta">{{ item.readTime }}</p>
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+        <a href="#">Read Article &rarr;</a>
+      </article>
+      }
+    </div>
+    </section>
+
+    <section class="faq-section reveal-up delay-2">
+    <header>
+      <p class="ui-kicker">FAQs</p>
+      <h2>Frequently Asked Questions</h2>
+    </header>
+    <div class="faq-list">
+      @for (item of faqs; track item.question; let i = $index) {
+      <article class="faq-item ui-surface">
+        <button type="button" class="faq-question" (click)="toggleFaq(i)">
+          <span>{{ item.question }}</span>
+          <strong>{{ openFaqIndex === i ? '-' : '+' }}</strong>
+        </button>
+        @if (openFaqIndex === i) {
+        <p class="faq-answer">{{ item.answer }}</p>
+        }
+      </article>
+      }
+    </div>
+    </section>
+  </section>
+
+  <section class="visit-contact reveal-up" id="contact">
+    <div class="visit-grid">
+      <article class="visit-card ui-surface">
+        <p class="ui-kicker">Visit Us</p>
+        <h2>Location & Access</h2>
+        <div class="map-wrap">
+          <iframe
+            title="Love Spa Location Map"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Victoria%20Falls%20Zimbabwe&output=embed"
+          ></iframe>
+        </div>
+        <ul class="access-list">
+          <li><strong>Address:</strong> Victoria falls Zim</li>
+          <li><strong>Parking:</strong> On-site lot plus nearby street parking</li>
+          <li><strong>Access:</strong> Second floor with elevator and stair access</li>
+        </ul>
+      </article>
+
+      <article class="contact-card ui-surface">
+        <p class="ui-kicker">Contact Form</p>
+        <h2>Non-Urgent Inquiries</h2>
+        <p>Use this form for general questions. For same-day booking changes, please call directly.</p>
+
+        <form [formGroup]="inquiryForm" (ngSubmit)="submitInquiry()" class="inquiry-form">
+          <label>
+            Full Name
+            <input type="text" formControlName="fullName" class="ui-input" />
+            @if (cf.fullName.touched && cf.fullName.invalid) {
+            <small>Please enter your name.</small>
+            }
+          </label>
+
+          <label>
+            Email
+            <input type="email" formControlName="email" class="ui-input" />
+            @if (cf.email.touched && cf.email.invalid) {
+            <small>Please enter a valid email.</small>
+            }
+          </label>
+
+          <label>
+            Phone (optional)
+            <input type="text" formControlName="phone" class="ui-input" />
+            @if (cf.phone.touched && cf.phone.invalid) {
+            <small>Use a valid phone format.</small>
+            }
+          </label>
+
+          <label>
+            Message
+            <textarea rows="4" formControlName="message" class="ui-input"></textarea>
+            @if (cf.message.touched && cf.message.invalid) {
+            <small>Please enter your message.</small>
+            }
+          </label>
+
+          @if (inquiryError) {
+          <p class="ui-state ui-state-error">{{ inquiryError }}</p>
+          }
+
+          @if (inquirySuccess) {
+          <p class="ui-state ui-state-success">{{ inquirySuccess }}</p>
+          }
+
+          <button type="submit" class="ui-btn ui-btn-primary" [disabled]="inquiryLoading">
+            {{ inquiryLoading ? 'Sending...' : 'Send Inquiry' }}
+          </button>
+        </form>
+      </article>
+    </div>
+  </section>
+
+  <section class="social-section reveal-up delay-2">
+    <header>
+      <p class="ui-kicker">Social Media</p>
+      <h2>Instagram Serenity Feed</h2>
+    </header>
+    <div class="social-grid">
+      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+        <img
+          src="https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&w=900&q=80"
+          alt="Spa treatment ambiance"
+        />
+      </a>
+      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+        <img
+          src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=900&q=80"
+          alt="Relaxing facial care setup"
+        />
+      </a>
+      <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+        <img
+          src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80"
+          alt="Massage room detail"
+        />
+      </a>
+    </div>
+    <a class="ui-btn ui-btn-muted" href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+      Follow on Instagram
+    </a>
+  </section>
+</section>

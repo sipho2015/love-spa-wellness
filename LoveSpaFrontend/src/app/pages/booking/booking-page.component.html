@@ -1,0 +1,213 @@
+<section class="booking-page">
+  <header class="booking-hero reveal-up">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="ui-kicker">Love Spa / Booking</p>
+      <h1>Reserve Your Wellness Session</h1>
+      <p>
+        Select your preferred service, therapist, and schedule. We confirm every request quickly
+        for a smooth and elegant booking experience.
+      </p>
+    </div>
+  </header>
+
+  <div class="booking-layout">
+    <aside class="booking-intro ui-surface reveal-up delay-1">
+      <p class="ui-kicker">Appointment concierge</p>
+      <h2>Designed for comfort</h2>
+      <p class="guest-note">No login required. You can book as a guest in a few steps.</p>
+      <ul>
+        <li>Fast online booking in under 2 minutes</li>
+        <li>Certified therapists and transparent pricing</li>
+        <li>Flexible weekday and weekend time slots</li>
+      </ul>
+
+      <section class="policy-box">
+        <h3>Cancellation Policy</h3>
+        <p>
+          Please cancel or reschedule at least <strong>24 hours</strong> before your appointment.
+          Late cancellations and no-shows may incur a fee.
+        </p>
+      </section>
+    </aside>
+
+    <form [formGroup]="bookingForm" (ngSubmit)="submit()" class="booking-form ui-surface reveal-up delay-2">
+      <div class="form-head">
+        <p class="ui-kicker">Secure Booking</p>
+        <h2>Booking Form</h2>
+        <p>Share your preferences and we will confirm your session quickly.</p>
+      </div>
+
+      <div class="form-steps" aria-label="Booking progress">
+        <article class="step-card" [class.active]="currentStep === 1" [class.complete]="hasCoreSelection">
+          <span class="step-index">1</span>
+          <div>
+            <h3>Service</h3>
+            <p>Pick your treatment and therapist.</p>
+          </div>
+        </article>
+        <article class="step-card" [class.active]="currentStep === 2" [class.complete]="hasContactAndSchedule">
+          <span class="step-index">2</span>
+          <div>
+            <h3>Details</h3>
+            <p>Add contact and schedule information.</p>
+          </div>
+        </article>
+        <article class="step-card" [class.active]="currentStep === 3" [class.complete]="bookingForm.valid">
+          <span class="step-index">3</span>
+          <div>
+            <h3>Confirm</h3>
+            <p>Review and submit your request.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          Service
+          <select formControlName="serviceId" class="ui-input">
+            <option [value]="0">Select a service</option>
+            @for (service of services; track service.id) {
+            <option [value]="service.id">
+              {{ service.name }} ({{ service.durationMinutes }} mins)
+            </option>
+            }
+          </select>
+          @if (f.serviceId.touched && f.serviceId.invalid) {
+          <small>Service is required.</small>
+          }
+        </label>
+
+        <label>
+          Therapist
+          <select formControlName="therapistId" class="ui-input">
+            <option [value]="0">Select a therapist</option>
+            @for (therapist of therapists; track therapist.id) {
+            <option [value]="therapist.id">
+              {{ therapist.name }} - {{ therapist.specialty }}
+            </option>
+            }
+          </select>
+          @if (f.therapistId.touched && f.therapistId.invalid) {
+          <small>Therapist is required.</small>
+          }
+        </label>
+
+        <label>
+          Customer Name
+          <input type="text" class="ui-input" formControlName="customerName" placeholder="Your full name" />
+          @if (f.customerName.touched && f.customerName.hasError('required')) {
+          <small>Customer name is required for guest booking.</small>
+          } @else if (f.customerName.touched && f.customerName.hasError('maxlength')) {
+          <small>Customer name is too long.</small>
+          }
+        </label>
+
+        <label>
+          Customer Email
+          <input type="email" class="ui-input" formControlName="customerEmail" placeholder="you@example.com" />
+          @if (f.customerEmail.touched && f.customerEmail.hasError('required')) {
+          <small>Customer email is required for guest booking.</small>
+          } @else if (f.customerEmail.touched && f.customerEmail.hasError('email')) {
+          <small>Enter a valid email address.</small>
+          } @else if (f.customerEmail.touched && f.customerEmail.hasError('maxlength')) {
+          <small>Email is too long.</small>
+          }
+        </label>
+
+        <label>
+          Customer Phone
+          <input type="tel" class="ui-input" formControlName="customerPhone" placeholder="+1 555 123 4567" />
+          @if (f.customerPhone.touched && f.customerPhone.invalid) {
+          <small>Valid phone number is required.</small>
+          }
+        </label>
+
+        <label>
+          Appointment Date
+          <input type="date" class="ui-input" formControlName="appointmentDate" [min]="minDate" />
+          @if (f.appointmentDate.touched && f.appointmentDate.invalid) {
+          <small>Appointment date is required.</small>
+          }
+        </label>
+
+        <section class="full-width time-slot-block">
+          <p class="field-title">Time Slot</p>
+          <input type="hidden" formControlName="timeSlot" />
+
+          @if (availabilityLoading) {
+          <p class="slot-status">Checking available time slots...</p>
+          } @else if (availabilityMessage) {
+          <p class="slot-status">{{ availabilityMessage }}</p>
+          }
+
+          <div class="slot-grid">
+            @for (slot of availableTimeSlots; track slot) {
+            <button
+              type="button"
+              class="time-chip"
+              [class.active]="isTimeSlotSelected(slot)"
+              [disabled]="availabilityLoading"
+              (click)="selectTimeSlot(slot)"
+            >
+              {{ slot }}
+            </button>
+            }
+          </div>
+
+          @if (f.timeSlot.touched && f.timeSlot.invalid) {
+          <small>Select one time slot.</small>
+          } @else if (f.timeSlot.value && !availableTimeSlots.includes(f.timeSlot.value)) {
+          <small>Selected time slot is no longer available.</small>
+          }
+        </section>
+
+        <label class="full-width">
+          Allergies / Sensitivities (optional)
+          <textarea rows="3" class="ui-input" formControlName="allergies" placeholder="e.g. nut oils, fragrances"></textarea>
+          @if (f.allergies.touched && f.allergies.invalid) {
+          <small>Allergy notes are too long.</small>
+          }
+        </label>
+
+        <label class="full-width">
+          Health Concerns (optional)
+          <textarea
+            rows="4"
+            class="ui-input"
+            formControlName="healthConcerns"
+            placeholder="Share injuries, pain points, medical concerns, or pressure preferences."
+          ></textarea>
+          @if (f.healthConcerns.touched && f.healthConcerns.invalid) {
+          <small>Health concern notes are too long.</small>
+          }
+        </label>
+      </div>
+
+      @if (submitError) {
+      <p class="ui-state ui-state-error">{{ submitError }}</p>
+      }
+
+      @if (submitSuccess) {
+      <p class="ui-state ui-state-success">{{ submitSuccess }}</p>
+      }
+
+      @if (latestBookingSummary) {
+      <section class="booking-success ui-surface reveal-up">
+        <p class="ui-kicker">Request Received</p>
+        <h3>We are preparing your confirmation</h3>
+        <p>{{ latestBookingSummary.serviceName }} with {{ latestBookingSummary.therapistName }}</p>
+        <p>
+          {{ latestBookingSummary.appointmentDate | date : 'mediumDate' }} at
+          {{ latestBookingSummary.timeSlot }}
+        </p>
+        <p>Booked for {{ latestBookingSummary.customerName }}</p>
+      </section>
+      }
+
+      <button type="submit" [disabled]="!canSubmit" class="ui-btn ui-btn-primary submit-btn">
+        {{ loading ? 'Submitting...' : 'Book Appointment' }}
+      </button>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,154 @@
+<div class="page-shell" [class.page-shell--bare]="isPackagesShowcaseRoute()">
+  @if (!isPackagesShowcaseRoute()) {
+  <header class="topbar">
+    <div class="topbar-inner" [class.topbar-inner--backoffice]="isBackOfficeRole()">
+      <a [routerLink]="brandLink" class="brand">
+        <img src="/images/love-spa-logo-mark.svg" alt="" class="brand-mark" aria-hidden="true" />
+        <span>Love Spa & Wellness</span>
+      </a>
+
+      @if (showPublicNavigation()) {
+      <nav class="topnav" aria-label="Main navigation">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+        <a routerLink="/about" routerLinkActive="active">About</a>
+        <a routerLink="/services" routerLinkActive="active">Services</a>
+        <a routerLink="/packages" routerLinkActive="active">Packages</a>
+        @if (canSeeBooking()) {
+        <a routerLink="/booking" routerLinkActive="active">Booking</a>
+        }
+      </nav>
+      } @else {
+      <div class="backoffice-spacer" aria-hidden="true"></div>
+      }
+
+      <div class="session">
+        @if (user$ | async) {
+        @if (isBackOfficeRole()) {
+        @if (hasRole('Admin')) {
+        <a [routerLink]="dashboardLink" routerLinkActive="active" class="dashboard-link">Admin Dashboard</a>
+        } @else if (hasRole('Staff')) {
+        <a [routerLink]="dashboardLink" routerLinkActive="active" class="dashboard-link">Staff Dashboard</a>
+        }
+        } @else if (hasRole('Customer')) {
+        <a [routerLink]="dashboardLink" routerLinkActive="active" class="dashboard-link">My Dashboard</a>
+        }
+        @if (canSeeBooking()) {
+        <a routerLink="/booking" class="book-btn">Book Now</a>
+        }
+        @if (hasRole('Admin')) {
+        <div class="admin-menu" (click)="$event.stopPropagation()">
+          <button
+            type="button"
+            class="admin-menu-toggle"
+            (click)="toggleAdminMenu($event)"
+            [attr.aria-expanded]="adminMenuOpen()"
+            aria-label="Open admin menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+
+          @if (adminMenuOpen()) {
+          <div class="admin-menu-dropdown ui-surface">
+            <button type="button" class="admin-menu-item" (click)="toggleTheme()">
+              Theme: {{ darkTheme() ? 'Dark' : 'Light' }}
+            </button>
+            <button type="button" class="admin-menu-item" (click)="openSettings()">Settings</button>
+            <button type="button" class="admin-menu-item admin-menu-item--danger" (click)="logoutFromMenu()">
+              Logout
+            </button>
+          </div>
+          }
+        </div>
+        } @else {
+        <button type="button" class="logout-btn" (click)="logout()">Logout</button>
+        }
+        } @else {
+        <div class="guest-actions">
+          <button type="button" class="login-link" (click)="openLoginModal()">Login</button>
+          <button type="button" class="register-link" (click)="openRegisterModal()">Create Account</button>
+          <a routerLink="/booking" class="book-btn">Book Now</a>
+        </div>
+        }
+      </div>
+    </div>
+  </header>
+  }
+
+  @if (settingsOpen() && hasRole('Admin')) {
+  <section class="settings-strip">
+    <div class="settings-strip-inner ui-surface reveal-up">
+      <div class="settings-copy">
+        <p class="ui-kicker">Settings</p>
+        <h3>Admin Preferences</h3>
+        <p>Switch workspace theme and keep your dashboard layout comfortable for daily use.</p>
+      </div>
+
+      <div class="settings-actions">
+        <button type="button" [class.active]="!darkTheme()" (click)="setTheme(false)">Light Theme</button>
+        <button type="button" [class.active]="darkTheme()" (click)="setTheme(true)">Dark Theme</button>
+        <button type="button" class="settings-close" (click)="closeSettings()">Close</button>
+      </div>
+    </div>
+  </section>
+  }
+
+  <main class="content" [class.content--bare]="isPackagesShowcaseRoute()">
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-auth-modal></app-auth-modal>
+
+  @if (showSiteFooter()) {
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <section>
+        <h4>Love Spa & Wellness</h4>
+        <p>Elegant body therapies, mindful healing rituals, and premium wellness care.</p>
+      </section>
+
+      <section>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a routerLink="/">Home</a></li>
+          <li><a routerLink="/about">About</a></li>
+          <li><a [routerLink]="['/']" fragment="resources">Resources</a></li>
+          <li><a routerLink="/services">Services</a></li>
+          <li><a routerLink="/packages">Packages</a></li>
+          <li><a routerLink="/booking">Booking</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <h4>Contact Info</h4>
+        <ul class="info-list">
+          <li><a href="mailto:siphomoyo893@gmail.com">siphomoyo893@gmail.com</a></li>
+          <li><a href="tel:+263789652298">+263 789 652 298</a></li>
+          <li>Victoria falls Zim</li>
+        </ul>
+      </section>
+
+      <section>
+        <h4>Opening Hours</h4>
+        <ul class="info-list">
+          <li>Mon - Fri: 9:00 AM - 8:00 PM</li>
+          <li>Sat: 10:00 AM - 7:00 PM</li>
+          <li>Sun: 10:00 AM - 6:00 PM</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-meta-links">
+        <a routerLink="/privacy-policy">Privacy Policy</a>
+        <a routerLink="/terms">Terms</a>
+        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+      </div>
+      <p>&copy; {{ year }} Love Spa & Wellness. All rights reserved.</p>
+    </div>
+  </footer>
+  }
+</div>
+
