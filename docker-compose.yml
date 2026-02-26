@@ -22,7 +22,7 @@ services:
       Jwt__Issuer: "LoveSpaBackend"
       Jwt__Audience: "LoveSpaFrontend"
       Jwt__ExpiryMinutes: "120"
-      App__FrontendBaseUrl: "http://localhost:4200"
+      App__FrontendBaseUrl: "http://localhost:${LOVE_SPA_FRONTEND_PORT:-4200}"
     depends_on:
       - sqlserver
     ports:
@@ -36,7 +36,7 @@ services:
     depends_on:
       - backend
     ports:
-      - "4200:80"
+      - "${LOVE_SPA_FRONTEND_PORT:-4200}:80"
 
 volumes:
   lovespa-sql-data:
