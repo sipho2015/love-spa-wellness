@@ -1,0 +1,52 @@
+name: Feature request
+description: Propose a new capability or enhancement.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What pain point or opportunity does this address?
+      placeholder: "Users cannot ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      placeholder: "Add a page/endpoint/flow that ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: "Other options were ..."
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: impact
+    attributes:
+      label: Impact area
+      options:
+        - label: Customer experience
+        - label: Staff operations
+        - label: Admin workflow
+        - label: Security/compliance
+        - label: Performance/scalability
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P1 (must-have)
+        - P2 (important)
+        - P3 (nice-to-have)
+    validations:
+      required: true

@@ -1,0 +1,64 @@
+name: Bug report
+description: Report a defect or regression in the product.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: What happened?
+      description: Describe the bug and current behavior.
+      placeholder: "When I click ..., the app ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      placeholder: "Expected ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Provide clear steps so we can reproduce quickly.
+      placeholder: |
+        1. Go to ...
+        2. Click ...
+        3. See error ...
+    validations:
+      required: true
+
+  - type: input
+    id: area
+    attributes:
+      label: Area
+      description: Where is this bug?
+      placeholder: "frontend booking page / backend appointments API / auth ..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Paste logs, stack traces, or screenshots if available.
+      placeholder: "Error logs, response payload, screenshot links..."
+    validations:
+      required: false
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - critical (production blocker)
+        - high (major feature impacted)
+        - medium (workaround exists)
+        - low (minor issue)
+    validations:
+      required: true
