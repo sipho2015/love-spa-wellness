@@ -80,8 +80,14 @@ if (!app.Environment.IsDevelopment())
 app.UseCors("SpaFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapGet("/", () => Results.Ok(new
+{
+    service = "LoveSpaBackend",
+    status = "running",
+    apiBase = "/api"
+})).AllowAnonymous();
 app.MapControllers();
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health").AllowAnonymous();
 
 using (var scope = app.Services.CreateScope())
 {
