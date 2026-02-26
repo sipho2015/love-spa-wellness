@@ -1,4 +1,4 @@
-import { AsyncPipe, DatePipe, DOCUMENT } from '@angular/common';
+import { AsyncPipe, DOCUMENT } from '@angular/common';
 import { Component, DestroyRef, HostListener, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs';
@@ -13,7 +13,7 @@ import { NotificationApiService } from './core/services/notification-api.service
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, AsyncPipe, DatePipe, AuthModalComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, AsyncPipe, AuthModalComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
