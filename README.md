@@ -82,7 +82,9 @@ Key constraints:
 
 ## Configure Database (SQL Server / SSMS)
 
-1. Open `LoveSpaBackend/appsettings.json` and confirm `ConnectionStrings:DefaultConnection`.
+1. Open `LoveSpaBackend/appsettings.json` and confirm:
+   - `ConnectionStrings:DefaultConnection`
+   - `Jwt:Key` is set to a long random secret (32+ chars)
 2. Default LocalDB connection:
    - `Server=(localdb)\\MSSQLLocalDB;Database=LoveSpaWellnessDb;Trusted_Connection=True;...`
 3. Apply migrations:
@@ -196,6 +198,9 @@ npm run test -- --watch=false --browsers=ChromeHeadless
 
 Build and run full stack (SQL Server + API + Angular frontend):
 
+1. Create a local `.env` file from `.env.example` and set real values.
+2. Start the stack:
+
 ```powershell
 docker compose up --build
 ```
@@ -205,7 +210,7 @@ Services:
 - Frontend: `http://localhost:4200`
 - Backend API: `http://localhost:5169`
 - Backend health: `http://localhost:5169/health`
-- SQL Server: `localhost,1433` (`sa` / `LoveSpaSql!2026`)
+- SQL Server: `localhost,1433` (`sa` / value from `LOVE_SPA_SQL_PASSWORD`)
 
 Files added:
 

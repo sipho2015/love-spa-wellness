@@ -4,7 +4,7 @@ services:
     container_name: love-spa-sql
     environment:
       ACCEPT_EULA: "Y"
-      SA_PASSWORD: "LoveSpaSql!2026"
+      SA_PASSWORD: "${LOVE_SPA_SQL_PASSWORD:?Set LOVE_SPA_SQL_PASSWORD in .env}"
     ports:
       - "1433:1433"
     volumes:
@@ -17,8 +17,8 @@ services:
     container_name: love-spa-backend
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=LoveSpaWellnessDb;User Id=sa;Password=LoveSpaSql!2026;TrustServerCertificate=True;Encrypt=False"
-      Jwt__Key: "LoveSpaWellnessSuperSecretJwtSigningKey_2026_KeepSafe"
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=LoveSpaWellnessDb;User Id=sa;Password=${LOVE_SPA_SQL_PASSWORD:?Set LOVE_SPA_SQL_PASSWORD in .env};TrustServerCertificate=True;Encrypt=False"
+      Jwt__Key: "${LOVE_SPA_JWT_KEY:?Set LOVE_SPA_JWT_KEY in .env}"
       Jwt__Issuer: "LoveSpaBackend"
       Jwt__Audience: "LoveSpaFrontend"
       Jwt__ExpiryMinutes: "120"
