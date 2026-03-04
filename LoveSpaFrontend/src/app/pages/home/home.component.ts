@@ -1,23 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { InquiryApiService } from '../../core/services/inquiry-api.service';
 
-interface Testimonial {
-  quote: string;
-  author: string;
-}
-
-interface FaqItem {
-  question: string;
-  answer: string;
-}
-
-interface ResourceItem {
+interface GuideCard {
   title: string;
-  description: string;
-  readTime: string;
+  country: string;
+  imageUrl: string;
+}
+
+interface CollectionCard {
+  title: string;
+  summary: string;
+  imageUrl: string;
+}
+
+interface DestinationCard {
+  name: string;
+  imageUrl: string;
 }
 
 @Component({
@@ -27,72 +28,79 @@ interface ResourceItem {
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly inquiryApi = inject(InquiryApiService);
 
-  private testimonialTimer: ReturnType<typeof setInterval> | null = null;
-
-  readonly testimonials: Testimonial[] = [
+  readonly guideCards: GuideCard[] = [
     {
-      quote:
-        'The atmosphere is peaceful and professional. Every session leaves me feeling lighter and more balanced.',
-      author: 'Rudo'
+      title: 'Cliffside Thermal Suites',
+      country: 'Portugal',
+      imageUrl:
+        'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1400&q=80'
     },
     {
-      quote: 'Booking is effortless, and the therapists truly listen to what your body needs.',
-      author: 'Tariro'
+      title: 'Rainforest Hydro Journey',
+      country: 'Costa Rica',
+      imageUrl:
+        'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=80'
     },
     {
-      quote:
-        'From the first visit, I felt cared for. The deep tissue therapy has helped my recovery immensely.',
-      author: 'Blessing'
+      title: 'Nordic Silence Rituals',
+      country: 'Finland',
+      imageUrl:
+        'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1400&q=80'
+    },
+    {
+      title: 'Island Reset Pavilion',
+      country: 'Maldives',
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2019/09/16/17/18/spa-4481538_1280.jpg'
     }
   ];
 
-  readonly resources: ResourceItem[] = [
+  readonly collectionCards: CollectionCard[] = [
     {
-      title: 'The Benefits of Hot Stone Massage in Winter',
-      description: 'How heat therapy improves circulation, eases tension, and supports cold-season recovery.',
-      readTime: '5 min read'
+      title: 'Spa & Sea',
+      summary: 'Oceanfront sanctuaries with hydrotherapy circuits and coastal bodywork.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80'
     },
     {
-      title: '5 At-Home Relaxation Tips Between Spa Visits',
-      description: 'Simple daily practices to reduce stress and keep your body calm between appointments.',
-      readTime: '4 min read'
+      title: 'Spa & Mountains',
+      summary: 'High-altitude retreats focused on sleep recovery and thermal contrast.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&w=1200&q=80'
     },
     {
-      title: 'How Often Should You Book a Massage?',
-      description: 'A practical guide to choosing a treatment schedule based on your lifestyle and goals.',
-      readTime: '6 min read'
+      title: 'Urban Detox',
+      summary: 'Design-led city escapes with precision treatments and mindful pacing.',
+      imageUrl:
+        'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=1200&q=80'
+    },
+    {
+      title: 'Wild Reset',
+      summary: 'Nature-first journeys with breathing rituals, forest walks, and recovery cuisine.',
+      imageUrl:
+        'https://cdn.pixabay.com/photo/2017/08/08/00/17/spa-2608450_1280.jpg'
     }
   ];
 
-  readonly faqs: FaqItem[] = [
+  readonly destinationCards: DestinationCard[] = [
     {
-      question: 'What should I wear during a massage?',
-      answer:
-        'Wear comfortable clothing to your appointment. Your therapist will guide you and ensure full draping privacy throughout the session.'
+      name: 'The Maldives',
+      imageUrl:
+        'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80'
     },
     {
-      question: 'Should I tip?',
-      answer:
-        'Tipping is appreciated but optional. If you feel your service exceeded expectations, you may tip at your discretion.'
+      name: 'Bali',
+      imageUrl:
+        'https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?auto=format&fit=crop&w=1200&q=80'
     },
     {
-      question: "What if I'm running late?",
-      answer:
-        'Please call us as soon as possible. We will do our best to accommodate you, though treatment time may be adjusted to protect other bookings.'
-    },
-    {
-      question: 'Do you have a couples room?',
-      answer:
-        'Yes, couples sessions can be arranged in advance. Contact us before booking so we can reserve the right setup.'
-    },
-    {
-      question: 'What is your cancellation policy?',
-      answer:
-        'Please provide at least 24 hours notice for cancellations or rescheduling. Late cancellations may be subject to a fee.'
+      name: 'Swiss Alps',
+      imageUrl:
+        'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80'
     }
   ];
 
@@ -103,37 +111,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     message: ['', [Validators.required, Validators.maxLength(2000)]]
   });
 
-  activeTestimonialIndex = 0;
-  openFaqIndex = 0;
   inquiryLoading = false;
   inquirySuccess = '';
   inquiryError = '';
 
-  ngOnInit(): void {
-    this.startTestimonialsRotation();
-  }
-
-  ngOnDestroy(): void {
-    if (this.testimonialTimer) {
-      clearInterval(this.testimonialTimer);
-    }
-  }
-
   get cf() {
     return this.inquiryForm.controls;
-  }
-
-  prevTestimonial(): void {
-    const next = this.activeTestimonialIndex - 1;
-    this.activeTestimonialIndex = next < 0 ? this.testimonials.length - 1 : next;
-  }
-
-  nextTestimonial(): void {
-    this.activeTestimonialIndex = (this.activeTestimonialIndex + 1) % this.testimonials.length;
-  }
-
-  toggleFaq(index: number): void {
-    this.openFaqIndex = this.openFaqIndex === index ? -1 : index;
   }
 
   submitInquiry(): void {
@@ -170,11 +153,5 @@ export class HomeComponent implements OnInit, OnDestroy {
           this.inquiryError = error?.error?.message ?? 'Unable to send inquiry right now. Please try again shortly.';
         }
       });
-  }
-
-  private startTestimonialsRotation(): void {
-    this.testimonialTimer = setInterval(() => {
-      this.nextTestimonial();
-    }, 5000);
   }
 }

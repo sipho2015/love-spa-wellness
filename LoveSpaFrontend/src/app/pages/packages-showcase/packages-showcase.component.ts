@@ -27,12 +27,12 @@ export class PackagesShowcaseComponent implements OnInit {
   packagesError = '';
   readonly year = new Date().getFullYear();
   readonly fallbackPackageImages = [
-    'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1556229162-5c63ed9c4efb?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=900&q=80'
+    'https://cdn.pixabay.com/photo/2019/09/16/17/18/spa-4481538_1280.jpg',
+    'https://cdn.pixabay.com/photo/2016/08/11/02/23/massage-therapy-1584711_1280.jpg',
+    'https://cdn.pixabay.com/photo/2017/05/30/19/42/skincare-2357980_1280.jpg',
+    'https://cdn.pixabay.com/photo/2014/12/13/18/27/woman-567021_1280.jpg',
+    'https://cdn.pixabay.com/photo/2023/09/01/20/06/spa-8227623_1280.jpg',
+    'https://cdn.pixabay.com/photo/2015/04/20/13/25/massage-731638_1280.jpg'
   ];
 
   spaPackages: SpaPackage[] = [];
@@ -41,12 +41,12 @@ export class PackagesShowcaseComponent implements OnInit {
     {
       heading: 'Relax & Restore Package',
       imageUrl:
-        'https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&w=1200&q=80'
+        'https://cdn.pixabay.com/photo/2018/11/14/03/35/kerzen-3814228_1280.jpg'
     },
     {
       heading: 'Glow & Renewal Ritual',
       imageUrl:
-        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80'
+        'https://cdn.pixabay.com/photo/2016/11/14/03/06/woman-1822468_1280.jpg'
     }
   ];
 
@@ -83,7 +83,12 @@ export class PackagesShowcaseComponent implements OnInit {
   }
 
   packageImage(item: SpaPackage, index: number): string {
-    return item.imageUrl?.trim() || this.fallbackPackageImages[index % this.fallbackPackageImages.length];
+    const candidate = item.imageUrl?.trim();
+    if (!candidate || candidate.includes('images.unsplash.com')) {
+      return this.fallbackPackageImages[index % this.fallbackPackageImages.length];
+    }
+
+    return candidate;
   }
 
   private loadPackages(): void {
@@ -112,3 +117,5 @@ export class PackagesShowcaseComponent implements OnInit {
     }, 2600);
   }
 }
+
+

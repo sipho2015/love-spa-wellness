@@ -33,8 +33,8 @@ export class App {
   readonly currentRoute = signal(this.router.url);
   readonly year = new Date().getFullYear();
   readonly adminMenuOpen = signal(false);
-  readonly settingsOpen = signal(false);
   readonly darkTheme = signal(false);
+  readonly mobileMenuOpen = signal(false);
   readonly notificationsOpen = signal(false);
   readonly notifications = signal<AppNotification[]>([]);
   readonly unreadNotificationCount = signal(0);
@@ -52,6 +52,7 @@ export class App {
       .subscribe((event) => {
         this.currentRoute.set(event.urlAfterRedirects);
         this.closeAdminMenu();
+        this.closeMobileMenu();
         this.closeNotifications();
       });
 
@@ -118,7 +119,6 @@ export class App {
   logout(): void {
     this.closeAdminMenu();
     this.closeNotifications();
-    this.settingsOpen.set(false);
     this.authService.logout();
     void this.router.navigateByUrl('/');
   }
@@ -134,17 +134,37 @@ export class App {
   @HostListener('document:click')
   onDocumentClick(): void {
     this.closeAdminMenu();
+    this.closeMobileMenu();
     this.closeNotifications();
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    if (window.innerWidth > 820 && this.mobileMenuOpen()) {
+      this.closeMobileMenu();
+    }
   }
 
   toggleAdminMenu(event: MouseEvent): void {
     event.stopPropagation();
+    this.closeMobileMenu();
     this.closeNotifications();
     this.adminMenuOpen.update((isOpen) => !isOpen);
   }
 
   closeAdminMenu(): void {
     this.adminMenuOpen.set(false);
+  }
+
+  toggleMobileMenu(event: MouseEvent): void {
+    event.stopPropagation();
+    this.closeAdminMenu();
+    this.closeNotifications();
+    this.mobileMenuOpen.update((isOpen) => !isOpen);
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen.set(false);
   }
 
   toggleNotifications(event: MouseEvent): void {
@@ -211,6 +231,7 @@ export class App {
   toggleTheme(): void {
     this.setTheme(!this.darkTheme());
     this.closeAdminMenu();
+    this.closeMobileMenu();
     this.closeNotifications();
   }
 
@@ -222,16 +243,6 @@ export class App {
     } catch {
       // Ignore storage failures in restricted browser contexts.
     }
-  }
-
-  openSettings(): void {
-    this.settingsOpen.set(true);
-    this.closeAdminMenu();
-    this.closeNotifications();
-  }
-
-  closeSettings(): void {
-    this.settingsOpen.set(false);
   }
 
   logoutFromMenu(): void {

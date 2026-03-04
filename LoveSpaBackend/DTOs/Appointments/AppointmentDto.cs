@@ -16,6 +16,11 @@ public class AppointmentDto
     public string? Allergies { get; set; }
     public string? HealthConcerns { get; set; }
     public string Status { get; set; } = string.Empty;
+    public decimal DepositAmount { get; set; }
+    public string DepositStatus { get; set; } = string.Empty;
+    public string? PaymentReference { get; set; }
+    public DateTime? DepositSubmittedAtUtc { get; set; }
+    public DateTime? DepositVerifiedAtUtc { get; set; }
     public DateTime CreatedAtUtc { get; set; }
     public DateTime UpdatedAtUtc { get; set; }
 }

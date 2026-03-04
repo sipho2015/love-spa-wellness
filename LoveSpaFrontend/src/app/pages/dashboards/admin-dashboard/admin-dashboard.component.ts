@@ -47,7 +47,13 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
   appointments: Appointment[] = [];
   inquiries: Inquiry[] = [];
 
-  readonly bookingStatuses: AppointmentStatus[] = ['Pending', 'Confirmed', 'Completed', 'Cancelled'];
+  readonly bookingStatuses: AppointmentStatus[] = [
+    'Pending',
+    'Confirmed',
+    'Pending Approval',
+    'Completed',
+    'Cancelled'
+  ];
   readonly bookingDrafts: Record<number, { therapistId: number; status: AppointmentStatus }> = {};
 
   serviceEditingId: number | null = null;
@@ -315,6 +321,7 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
       timeSlot: appointment.timeSlot,
       allergies: appointment.allergies ?? undefined,
       healthConcerns: appointment.healthConcerns ?? undefined,
+      paymentReference: appointment.paymentReference ?? undefined,
       status: draft?.status ?? appointment.status
     };
 
@@ -334,6 +341,37 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
         this.errorMessage = 'Could not update booking assignment.';
       }
     });
+  }
+
+  verifyDeposit(appointment: Appointment): void {
+    if (this.updatingBookingId === appointment.id || appointment.depositStatus === 'Verified') {
+      return;
+    }
+
+    this.errorMessage = '';
+    this.successMessage = '';
+    this.updatingBookingId = appointment.id;
+
+    this.appointmentsApi
+      .verifyDeposit(appointment.id, {
+        paymentReference: appointment.paymentReference ?? undefined,
+        markBookingConfirmed: true
+      })
+      .subscribe({
+        next: (updated) => {
+          this.appointments = this.appointments.map((item) => (item.id === appointment.id ? updated : item));
+          this.bookingDrafts[appointment.id] = {
+            therapistId: updated.therapistId,
+            status: updated.status
+          };
+          this.updatingBookingId = null;
+          this.successMessage = `Deposit verified for booking #${appointment.id}.`;
+        },
+        error: (error) => {
+          this.updatingBookingId = null;
+          this.errorMessage = error?.error?.message ?? 'Could not verify deposit.';
+        }
+      });
   }
 
   saveService(): void {
@@ -658,10 +696,11 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     const previous = this.loadNotificationState(storageKey);
     const bookingIds = appointments.map((appointment) => appointment.id);
     const inquiryIds = inquiries.map((inquiry) => inquiry.id);
+    const bookingStatuses = this.toBookingStatusMap(appointments);
 
     if (!this.notificationsInitialized) {
       this.notificationsInitialized = true;
-      this.saveNotificationState(storageKey, bookingIds, inquiryIds);
+      this.saveNotificationState(storageKey, bookingIds, inquiryIds, bookingStatuses);
       return;
     }
 
@@ -670,13 +709,27 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
 
     const newBookingsCount = bookingIds.filter((id) => !previousBookings.has(id)).length;
     const newInquiriesCount = inquiryIds.filter((id) => !previousInquiries.has(id)).length;
+    const approvalRequests = appointments.filter((appointment) => {
+      const previousStatus = previous.bookingStatuses[appointment.id];
+      return (
+        appointment.status === 'Pending Approval' &&
+        previousStatus !== 'Pending Approval'
+      );
+    });
 
-    if (newBookingsCount > 0 || newInquiriesCount > 0) {
+    if (approvalRequests.length > 0) {
+      const firstRequest = approvalRequests[0];
+      this.adminNotice =
+        approvalRequests.length === 1
+          ? `Approval needed: ${firstRequest.therapistName} requested completion for booking #${firstRequest.id}.`
+          : `Approval needed: ${approvalRequests.length} bookings were marked completed by staff.`;
+      this.startNoticeTimer();
+    } else if (newBookingsCount > 0 || newInquiriesCount > 0) {
       this.adminNotice = this.buildNoticeMessage(newBookingsCount, newInquiriesCount);
       this.startNoticeTimer();
     }
 
-    this.saveNotificationState(storageKey, bookingIds, inquiryIds);
+    this.saveNotificationState(storageKey, bookingIds, inquiryIds, bookingStatuses);
   }
 
   private notificationStorageKey(): string {
@@ -684,25 +737,56 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     return `love_spa_admin_seen_items_${userId}`;
   }
 
-  private loadNotificationState(storageKey: string): { bookingIds: number[]; inquiryIds: number[] } {
+  private loadNotificationState(storageKey: string): {
+    bookingIds: number[];
+    inquiryIds: number[];
+    bookingStatuses: Record<number, AppointmentStatus>;
+  } {
     const raw = localStorage.getItem(storageKey);
     if (!raw) {
-      return { bookingIds: [], inquiryIds: [] };
+      return { bookingIds: [], inquiryIds: [], bookingStatuses: {} };
     }
 
     try {
-      const parsed = JSON.parse(raw) as { bookingIds?: number[]; inquiryIds?: number[] };
+      const parsed = JSON.parse(raw) as {
+        bookingIds?: number[];
+        inquiryIds?: number[];
+        bookingStatuses?: Record<string, AppointmentStatus>;
+      };
+      const bookingStatuses: Record<number, AppointmentStatus> = {};
+      for (const [idKey, status] of Object.entries(parsed.bookingStatuses ?? {})) {
+        const parsedId = Number(idKey);
+        if (Number.isInteger(parsedId) && parsedId > 0) {
+          bookingStatuses[parsedId] = status;
+        }
+      }
+
       return {
         bookingIds: (parsed.bookingIds ?? []).filter((id) => Number.isInteger(id) && id > 0),
-        inquiryIds: (parsed.inquiryIds ?? []).filter((id) => Number.isInteger(id) && id > 0)
+        inquiryIds: (parsed.inquiryIds ?? []).filter((id) => Number.isInteger(id) && id > 0),
+        bookingStatuses
       };
     } catch {
-      return { bookingIds: [], inquiryIds: [] };
+      return { bookingIds: [], inquiryIds: [], bookingStatuses: {} };
     }
   }
 
-  private saveNotificationState(storageKey: string, bookingIds: number[], inquiryIds: number[]): void {
-    localStorage.setItem(storageKey, JSON.stringify({ bookingIds, inquiryIds }));
+  private saveNotificationState(
+    storageKey: string,
+    bookingIds: number[],
+    inquiryIds: number[],
+    bookingStatuses: Record<number, AppointmentStatus>
+  ): void {
+    localStorage.setItem(storageKey, JSON.stringify({ bookingIds, inquiryIds, bookingStatuses }));
+  }
+
+  private toBookingStatusMap(appointments: Appointment[]): Record<number, AppointmentStatus> {
+    const map: Record<number, AppointmentStatus> = {};
+    for (const appointment of appointments) {
+      map[appointment.id] = appointment.status;
+    }
+
+    return map;
   }
 
   private buildNoticeMessage(newBookingsCount: number, newInquiriesCount: number): string {
@@ -758,3 +842,4 @@ export class AdminDashboardComponent implements OnInit, OnDestroy {
     return trimmed.split(/\s+/)[0];
   }
 }
+

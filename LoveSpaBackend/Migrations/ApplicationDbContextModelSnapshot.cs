@@ -42,6 +42,22 @@ namespace LoveSpaBackend.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("SYSUTCDATETIME()");
 
+                    b.Property<decimal>("DepositAmount")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.Property<string>("DepositStatus")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasDefaultValue("Pending");
+
+                    b.Property<DateTime?>("DepositSubmittedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DepositVerifiedAtUtc")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("CustomerEmail")
                         .HasMaxLength(160)
                         .HasColumnType("nvarchar(160)");
@@ -62,6 +78,10 @@ namespace LoveSpaBackend.Migrations
                     b.Property<string>("HealthConcerns")
                         .HasMaxLength(1200)
                         .HasColumnType("nvarchar(1200)");
+
+                    b.Property<string>("PaymentReference")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
 
                     b.Property<int>("ServiceId")
                         .HasColumnType("int");

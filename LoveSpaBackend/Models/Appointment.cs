@@ -53,6 +53,20 @@ public class Appointment
     [MaxLength(20)]
     public string Status { get; set; } = AppointmentStatuses.Pending;
 
+    [Column(TypeName = "decimal(10,2)")]
+    public decimal DepositAmount { get; set; }
+
+    [Required]
+    [MaxLength(20)]
+    public string DepositStatus { get; set; } = DepositStatuses.Pending;
+
+    [MaxLength(120)]
+    public string? PaymentReference { get; set; }
+
+    public DateTime? DepositSubmittedAtUtc { get; set; }
+
+    public DateTime? DepositVerifiedAtUtc { get; set; }
+
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 
     public DateTime UpdatedAtUtc { get; set; } = DateTime.UtcNow;

@@ -34,6 +34,9 @@ public class UpdateAppointmentDto
     [MaxLength(1200)]
     public string? HealthConcerns { get; set; }
 
+    [MaxLength(120)]
+    public string? PaymentReference { get; set; }
+
     [Required]
     [MaxLength(20)]
     public string Status { get; set; } = string.Empty;

@@ -68,7 +68,7 @@ public static class DbSeeder
                         OriginalPrice = 168.00m,
                         PackagePrice = 149.00m,
                         ImageUrl =
-                            "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80",
+                            "https://cdn.pixabay.com/photo/2019/09/16/17/18/spa-4481538_1280.jpg",
                         IsActive = true,
                         PackageServices =
                         [
@@ -84,7 +84,7 @@ public static class DbSeeder
                         OriginalPrice = 208.00m,
                         PackagePrice = 179.00m,
                         ImageUrl =
-                            "https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80",
+                            "https://cdn.pixabay.com/photo/2017/05/30/19/42/skincare-2357980_1280.jpg",
                         IsActive = true,
                         PackageServices =
                         [
@@ -100,7 +100,7 @@ public static class DbSeeder
                         OriginalPrice = 287.00m,
                         PackagePrice = 239.00m,
                         ImageUrl =
-                            "https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&w=900&q=80",
+                            "https://cdn.pixabay.com/photo/2018/11/14/03/35/kerzen-3814228_1280.jpg",
                         IsActive = true,
                         PackageServices =
                         [
@@ -228,3 +228,4 @@ public static class DbSeeder
         }
     }
 }
+

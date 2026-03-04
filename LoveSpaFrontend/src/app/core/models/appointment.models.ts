@@ -1,4 +1,5 @@
-export type AppointmentStatus = 'Pending' | 'Confirmed' | 'Completed' | 'Cancelled';
+export type AppointmentStatus = 'Pending' | 'Confirmed' | 'Pending Approval' | 'Completed' | 'Cancelled';
+export type DepositStatus = 'Pending' | 'Submitted' | 'Verified';
 
 export interface Appointment {
   id: number;
@@ -15,6 +16,11 @@ export interface Appointment {
   allergies?: string | null;
   healthConcerns?: string | null;
   status: AppointmentStatus;
+  depositAmount: number;
+  depositStatus: DepositStatus;
+  paymentReference?: string | null;
+  depositSubmittedAtUtc?: string | null;
+  depositVerifiedAtUtc?: string | null;
   createdAtUtc: string;
   updatedAtUtc: string;
 }
@@ -29,6 +35,7 @@ export interface CreateAppointmentRequest {
   timeSlot: string;
   allergies?: string;
   healthConcerns?: string;
+  paymentReference?: string;
 }
 
 export interface UpdateAppointmentRequest {
@@ -41,6 +48,7 @@ export interface UpdateAppointmentRequest {
   timeSlot: string;
   allergies?: string;
   healthConcerns?: string;
+  paymentReference?: string;
   status: AppointmentStatus;
 }
 
@@ -53,6 +61,11 @@ export interface RescheduleAppointmentRequest {
   timeSlot: string;
 }
 
+export interface VerifyDepositRequest {
+  paymentReference?: string;
+  markBookingConfirmed?: boolean;
+}
+
 export interface AppointmentAvailability {
   therapistId: number;
   appointmentDate: string;
@@ -61,3 +74,4 @@ export interface AppointmentAvailability {
   message?: string | null;
   availableSlots: string[];
 }
+

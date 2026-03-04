@@ -10,7 +10,7 @@
   overflow: hidden;
   background:
     linear-gradient(90deg, rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.2)),
-    url('/images/spa-zen-stones.svg') center / cover no-repeat;
+    url('https://cdn.pixabay.com/photo/2019/09/16/17/18/spa-4481538_1280.jpg') center / cover no-repeat;
   box-shadow: var(--shadow-medium);
   display: flex;
   align-items: flex-end;
@@ -93,12 +93,6 @@
   border-left: 4px solid #3a8f5f;
 }
 
-.overview-grid {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 14px;
-}
-
 .overview-panel {
   padding: 20px;
 }
@@ -125,12 +119,6 @@
   margin: 8px 0 0;
   font-size: 1.75rem;
   color: var(--accent-text-strong);
-}
-
-.quick-actions {
-  margin-top: 14px;
-  display: grid;
-  gap: 8px;
 }
 
 .panel {
@@ -294,10 +282,6 @@ textarea.ui-input {
 }
 
 @media (max-width: 1080px) {
-  .overview-grid {
-    grid-template-columns: 1fr;
-  }
-
   .summary {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

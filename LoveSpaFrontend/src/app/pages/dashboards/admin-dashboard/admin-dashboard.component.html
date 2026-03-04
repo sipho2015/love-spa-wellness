@@ -51,60 +51,27 @@
   <p class="ui-state ui-state-success">{{ successMessage }}</p>
   }
 
-  @if (adminNotice) {
-  <p class="ui-state ui-state-success admin-notice">{{ adminNotice }}</p>
-  }
-
   @if (isActiveSection('overview')) {
-  <section class="overview-grid reveal-up delay-1">
-    <article class="overview-panel ui-surface">
-      <h2>Live Snapshot</h2>
-      <div class="summary">
-        <article>
-          <p class="ui-kicker">New Inquiries</p>
-          <h3>{{ pendingInquiriesCount }}</h3>
-        </article>
-        <article>
-          <p class="ui-kicker">Pending Bookings</p>
-          <h3>{{ pendingBookingsCount }}</h3>
-        </article>
-        <article>
-          <p class="ui-kicker">Services</p>
-          <h3>{{ services.length }}</h3>
-        </article>
-        <article>
-          <p class="ui-kicker">Packages</p>
-          <h3>{{ packages.length }}</h3>
-        </article>
-        <article>
-          <p class="ui-kicker">Therapists</p>
-          <h3>{{ therapists.length }}</h3>
-        </article>
-        <article>
-          <p class="ui-kicker">Users</p>
-          <h3>{{ users.length }}</h3>
-        </article>
-      </div>
-    </article>
-
-    <article class="overview-panel ui-surface">
-      <h2>Quick Actions</h2>
-      <p>Use these shortcuts to jump directly into critical tasks.</p>
-      <div class="quick-actions">
-        <button type="button" class="ui-btn ui-btn-primary" (click)="setActiveSection('bookings')">
-          Review New Bookings
-        </button>
-        <button type="button" class="ui-btn ui-btn-muted" (click)="setActiveSection('inquiries')">
-          Open Inquiries Queue
-        </button>
-        <button type="button" class="ui-btn ui-btn-muted" (click)="setActiveSection('therapists')">
-          Link Therapist Accounts
-        </button>
-        <button type="button" class="ui-btn ui-btn-muted" (click)="setActiveSection('services')">
-          Update Services
-        </button>
-      </div>
-    </article>
+  <section class="overview-panel ui-surface reveal-up delay-1">
+    <h2>Workspace Overview</h2>
+    <p class="panel-subtitle">
+      Use the tabs above as the single navigation flow for all admin work.
+      Counts on each tab show what needs attention.
+    </p>
+    <div class="summary">
+      <article>
+        <p class="ui-kicker">Pending Bookings</p>
+        <h3>{{ pendingBookingsCount }}</h3>
+      </article>
+      <article>
+        <p class="ui-kicker">Pending Inquiries</p>
+        <h3>{{ pendingInquiriesCount }}</h3>
+      </article>
+      <article>
+        <p class="ui-kicker">Therapists</p>
+        <h3>{{ therapists.length }}</h3>
+      </article>
+    </div>
   </section>
   }
 
@@ -117,7 +84,7 @@
       </div>
       <button type="button" class="ui-btn ui-btn-muted" (click)="setActiveSection('overview')">Back to Overview</button>
     </header>
-    <p class="panel-subtitle">Assign bookings to therapists and update statuses from one queue.</p>
+    <p class="panel-subtitle">Assign bookings, review staff completion requests, and approve final completed status.</p>
 
     @if (appointments.length === 0) {
     <p class="ui-state">No bookings yet.</p>
@@ -130,6 +97,7 @@
             <th>Customer</th>
             <th>Service</th>
             <th>Schedule</th>
+            <th>Deposit</th>
             <th>Assign Staff</th>
             <th>Status</th>
             <th></th>
@@ -153,6 +121,18 @@
             <td>
               {{ appointment.appointmentDate | date : 'mediumDate' }}
               <div>{{ appointment.timeSlot }}</div>
+            </td>
+            <td>
+              <div>
+                {{ appointment.depositAmount | currency : 'USD' : 'symbol' : '1.2-2' }}
+              </div>
+              <div><strong>{{ appointment.depositStatus }}</strong></div>
+              @if (appointment.paymentReference) {
+              <div class="inquiry-meta">Ref: {{ appointment.paymentReference }}</div>
+              }
+              @if (appointment.depositVerifiedAtUtc) {
+              <div class="inquiry-meta">Verified {{ appointment.depositVerifiedAtUtc | date : 'short' }}</div>
+              }
             </td>
             <td>
               <select
@@ -188,6 +168,14 @@
                 (click)="saveBookingChanges(appointment)"
               >
                 Save
+              </button>
+              <button
+                type="button"
+                class="ui-btn ui-btn-muted mini-btn"
+                [disabled]="updatingBookingId === appointment.id || appointment.depositStatus === 'Verified'"
+                (click)="verifyDeposit(appointment)"
+              >
+                {{ appointment.depositStatus === 'Verified' ? 'Verified' : 'Verify Deposit' }}
               </button>
             </td>
           </tr>

@@ -6,6 +6,7 @@ import {
   AppointmentAvailability,
   CreateAppointmentRequest,
   RescheduleAppointmentRequest,
+  VerifyDepositRequest,
   UpdateAppointmentRequest,
   UpdateAppointmentStatusRequest
 } from '../models/appointment.models';
@@ -59,6 +60,10 @@ export class AppointmentApiService {
 
   updateStatus(id: number, payload: UpdateAppointmentStatusRequest): Observable<Appointment> {
     return this.http.patch<Appointment>(`${this.endpoint}/${id}/status`, payload);
+  }
+
+  verifyDeposit(id: number, payload: VerifyDepositRequest): Observable<Appointment> {
+    return this.http.patch<Appointment>(`${this.endpoint}/${id}/deposit/verify`, payload);
   }
 
   reschedule(id: number, payload: RescheduleAppointmentRequest): Observable<Appointment> {

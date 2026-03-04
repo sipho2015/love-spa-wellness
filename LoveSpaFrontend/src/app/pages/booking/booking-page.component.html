@@ -23,7 +23,11 @@
       </ul>
 
       <section class="policy-box">
-        <h3>Cancellation Policy</h3>
+        <h3>Booking & Deposit Policy</h3>
+        <p>
+          A <strong>30% deposit</strong> is required to confirm your appointment.
+          Submit your payment reference now or share it with our team after booking.
+        </p>
         <p>
           Please cancel or reschedule at least <strong>24 hours</strong> before your appointment.
           Late cancellations and no-shows may incur a fee.
@@ -182,6 +186,19 @@
           <small>Health concern notes are too long.</small>
           }
         </label>
+
+        <label class="full-width">
+          Deposit Payment Reference (optional)
+          <input
+            type="text"
+            class="ui-input"
+            formControlName="paymentReference"
+            placeholder="Bank transfer reference / proof number"
+          />
+          @if (f.paymentReference.touched && f.paymentReference.invalid) {
+          <small>Payment reference is too long.</small>
+          }
+        </label>
       </div>
 
       @if (submitError) {
@@ -202,6 +219,11 @@
           {{ latestBookingSummary.timeSlot }}
         </p>
         <p>Booked for {{ latestBookingSummary.customerName }}</p>
+        <p>
+          Deposit required:
+          {{ latestBookingSummary.depositAmount | currency : 'USD' : 'symbol' : '1.2-2' }}
+          ({{ latestBookingSummary.depositStatus }})
+        </p>
       </section>
       }
 

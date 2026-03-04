@@ -22,7 +22,7 @@
     @for (service of services; track service.id; let i = $index) {
     <article class="service-card reveal-up" [class.delay-1]="i % 3 === 1" [class.delay-2]="i % 3 === 2">
       <div class="card-media">
-        <img [src]="cardImage(i)" [alt]="service.name + ' spa treatment'" />
+        <img [src]="cardImage(i)" [alt]="service.name + ' spa treatment'" loading="lazy" decoding="async" />
         <span class="price-badge">{{ service.price | currency : 'USD' }}</span>
       </div>
 

@@ -21,7 +21,7 @@ export class StaffDashboardComponent implements OnInit, OnDestroy {
   private refreshTimer: ReturnType<typeof setInterval> | null = null;
   private noticeTimer: ReturnType<typeof setTimeout> | null = null;
 
-  readonly statuses: AppointmentStatus[] = ['Pending', 'Confirmed', 'Completed', 'Cancelled'];
+  readonly statuses: AppointmentStatus[] = ['Pending', 'Confirmed', 'Pending Approval'];
 
   appointments: Appointment[] = [];
   loading = false;
@@ -178,3 +178,4 @@ export class StaffDashboardComponent implements OnInit, OnDestroy {
     this.noticeTimer = null;
   }
 }
+

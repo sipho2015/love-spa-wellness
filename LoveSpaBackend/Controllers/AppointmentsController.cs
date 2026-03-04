@@ -252,6 +252,12 @@ public class AppointmentsController(
             Allergies = NormalizeOptional(request.Allergies),
             HealthConcerns = NormalizeOptional(request.HealthConcerns),
             Status = AppointmentStatuses.Pending,
+            DepositAmount = decimal.Round(service.Price * 0.30m, 2, MidpointRounding.AwayFromZero),
+            DepositStatus = string.IsNullOrWhiteSpace(request.PaymentReference)
+                ? DepositStatuses.Pending
+                : DepositStatuses.Submitted,
+            PaymentReference = NormalizeOptional(request.PaymentReference),
+            DepositSubmittedAtUtc = string.IsNullOrWhiteSpace(request.PaymentReference) ? null : DateTime.UtcNow,
             CreatedAtUtc = DateTime.UtcNow,
             UpdatedAtUtc = DateTime.UtcNow
         };
@@ -345,6 +351,10 @@ public class AppointmentsController(
         appointment.TimeSlot = timeSlot;
         appointment.Allergies = NormalizeOptional(request.Allergies);
         appointment.HealthConcerns = NormalizeOptional(request.HealthConcerns);
+        appointment.PaymentReference = NormalizeOptional(request.PaymentReference) ?? appointment.PaymentReference;
+        appointment.DepositSubmittedAtUtc = appointment.PaymentReference is null
+            ? appointment.DepositSubmittedAtUtc
+            : appointment.DepositSubmittedAtUtc ?? DateTime.UtcNow;
         appointment.Status = normalizedStatus;
         appointment.UpdatedAtUtc = DateTime.UtcNow;
 
@@ -385,6 +395,31 @@ public class AppointmentsController(
             return BadRequest(new { message = $"Status must be one of: {string.Join(", ", AppointmentStatuses.All)}." });
         }
 
+        if (!CanMoveToStatusWithDeposit(normalizedStatus, appointment.DepositStatus))
+        {
+            return BadRequest(new { message = "Deposit must be verified before confirming or completing this booking." });
+        }
+
+        var isStaff = User.IsInRole(Roles.Staff);
+        var isAdmin = User.IsInRole(Roles.Admin);
+
+        // Backward-compatible behavior for older staff UIs that still send "Completed".
+        if (isStaff && string.Equals(normalizedStatus, AppointmentStatuses.Completed, StringComparison.Ordinal))
+        {
+            normalizedStatus = AppointmentStatuses.CompletedPendingApproval;
+        }
+
+        var transitionValidationError = ValidateStatusTransition(
+            appointment.Status,
+            normalizedStatus,
+            appointment.DepositStatus,
+            isAdmin,
+            isStaff);
+        if (!string.IsNullOrWhiteSpace(transitionValidationError))
+        {
+            return BadRequest(new { message = transitionValidationError });
+        }
+
         if (string.Equals(appointment.Status, normalizedStatus, StringComparison.Ordinal))
         {
             var current = await BuildAppointmentQuery().FirstAsync(a => a.Id == id);
@@ -395,7 +430,54 @@ public class AppointmentsController(
         appointment.UpdatedAtUtc = DateTime.UtcNow;
         await context.SaveChangesAsync();
 
-        await NotifyCustomerOfStatusUpdateAsync(appointment);
+        if (isStaff && normalizedStatus == AppointmentStatuses.CompletedPendingApproval)
+        {
+            await NotifyAdminsOfCompletionApprovalRequestAsync(appointment);
+        }
+        else
+        {
+            await NotifyCustomerOfStatusUpdateAsync(appointment);
+        }
+
+        var mapped = await BuildAppointmentQuery().FirstAsync(a => a.Id == id);
+        return Ok(ToDto(mapped));
+    }
+
+    [HttpPatch("{id:int}/deposit/verify")]
+    [Authorize(Roles = Roles.Admin)]
+    public async Task<ActionResult<AppointmentDto>> VerifyDeposit(int id, VerifyDepositDto request)
+    {
+        var appointment = await context.Appointments.FirstOrDefaultAsync(a => a.Id == id);
+        if (appointment is null)
+        {
+            return NotFound();
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.PaymentReference))
+        {
+            appointment.PaymentReference = request.PaymentReference.Trim();
+        }
+
+        if (appointment.DepositStatus != DepositStatuses.Verified)
+        {
+            appointment.DepositStatus = DepositStatuses.Verified;
+            appointment.DepositVerifiedAtUtc = DateTime.UtcNow;
+            appointment.DepositSubmittedAtUtc ??= DateTime.UtcNow;
+        }
+
+        var previousStatus = appointment.Status;
+        if (request.MarkBookingConfirmed && appointment.Status == AppointmentStatuses.Pending)
+        {
+            appointment.Status = AppointmentStatuses.Confirmed;
+        }
+
+        appointment.UpdatedAtUtc = DateTime.UtcNow;
+        await context.SaveChangesAsync();
+
+        if (!string.Equals(previousStatus, appointment.Status, StringComparison.Ordinal))
+        {
+            await NotifyCustomerOfStatusUpdateAsync(appointment);
+        }
 
         var mapped = await BuildAppointmentQuery().FirstAsync(a => a.Id == id);
         return Ok(ToDto(mapped));
@@ -416,7 +498,7 @@ public class AppointmentsController(
             return Forbid();
         }
 
-        if (appointment.Status is AppointmentStatuses.Completed or AppointmentStatuses.Cancelled)
+        if (appointment.Status is AppointmentStatuses.Completed or AppointmentStatuses.CompletedPendingApproval or AppointmentStatuses.Cancelled)
         {
             return BadRequest(new { message = "Only pending or confirmed bookings can be rescheduled." });
         }
@@ -499,7 +581,7 @@ public class AppointmentsController(
             return Forbid();
         }
 
-        if (appointment.Status == AppointmentStatuses.Completed)
+        if (appointment.Status is AppointmentStatuses.Completed or AppointmentStatuses.CompletedPendingApproval)
         {
             return BadRequest(new { message = "Completed appointments cannot be cancelled." });
         }
@@ -560,12 +642,78 @@ public class AppointmentsController(
             Allergies = appointment.Allergies,
             HealthConcerns = appointment.HealthConcerns,
             Status = appointment.Status,
+            DepositAmount = appointment.DepositAmount,
+            DepositStatus = appointment.DepositStatus,
+            PaymentReference = appointment.PaymentReference,
+            DepositSubmittedAtUtc = appointment.DepositSubmittedAtUtc,
+            DepositVerifiedAtUtc = appointment.DepositVerifiedAtUtc,
             CreatedAtUtc = appointment.CreatedAtUtc,
             UpdatedAtUtc = appointment.UpdatedAtUtc
         };
 
     private static string? NormalizeStatus(string status) =>
         AppointmentStatuses.All.FirstOrDefault(s => string.Equals(s, status, StringComparison.OrdinalIgnoreCase));
+
+    private static string? ValidateStatusTransition(
+        string currentStatus,
+        string requestedStatus,
+        string depositStatus,
+        bool isAdmin,
+        bool isStaff)
+    {
+        if (!isAdmin && !isStaff)
+        {
+            return "You are not allowed to update appointment status.";
+        }
+
+        if (isStaff)
+        {
+            if (requestedStatus is AppointmentStatuses.Cancelled or AppointmentStatuses.Completed)
+            {
+                return "Staff can only confirm bookings or request completion approval.";
+            }
+
+            if (requestedStatus == AppointmentStatuses.CompletedPendingApproval &&
+                currentStatus != AppointmentStatuses.Confirmed)
+            {
+                return "Only confirmed bookings can be marked as pending approval.";
+            }
+
+            if (currentStatus is AppointmentStatuses.Completed or AppointmentStatuses.Cancelled)
+            {
+                return "Finalized bookings cannot be changed by staff.";
+            }
+        }
+
+        if (isAdmin &&
+            currentStatus == AppointmentStatuses.CompletedPendingApproval &&
+            requestedStatus == AppointmentStatuses.Pending)
+        {
+            return "Completed approval requests cannot be moved back to pending. Use Confirmed or Completed.";
+        }
+
+        if (!CanMoveToStatusWithDeposit(requestedStatus, depositStatus))
+        {
+            return "Deposit must be verified before confirming or completing this booking.";
+        }
+
+        return null;
+    }
+
+    private static bool CanMoveToStatusWithDeposit(string requestedStatus, string depositStatus)
+    {
+        var requiresVerifiedDeposit =
+            requestedStatus is AppointmentStatuses.Confirmed or
+            AppointmentStatuses.CompletedPendingApproval or
+            AppointmentStatuses.Completed;
+
+        if (!requiresVerifiedDeposit)
+        {
+            return true;
+        }
+
+        return string.Equals(depositStatus, DepositStatuses.Verified, StringComparison.Ordinal);
+    }
 
     private static string NormalizeTimeSlot(string timeSlot)
     {
@@ -851,6 +999,20 @@ public class AppointmentsController(
             $"Current Status: {appointment.Status}";
 
         await NotifyAdminsAsync(subject, body, NotificationTypes.Warning, nameof(Appointment), appointment.Id);
+    }
+
+    private async Task NotifyAdminsOfCompletionApprovalRequestAsync(Appointment appointment)
+    {
+        var actorName = User.FindFirstValue(ClaimTypes.Name) ?? appointment.Therapist?.Name ?? "Assigned staff";
+        var subject = $"Completion approval needed for booking #{appointment.Id}";
+        var body =
+            $"Staff: {actorName}\n" +
+            $"Customer: {appointment.CustomerName}\n" +
+            $"Date: {appointment.AppointmentDate:yyyy-MM-dd}\n" +
+            $"Time: {appointment.TimeSlot}\n\n" +
+            "Action required: review and approve this completion request.";
+
+        await NotifyAdminsAsync(subject, body, NotificationTypes.Alert, nameof(Appointment), appointment.Id);
     }
 
     private async Task NotifyAdminsAsync(

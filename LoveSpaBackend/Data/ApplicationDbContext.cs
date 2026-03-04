@@ -114,6 +114,15 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             .Property(a => a.UpdatedAtUtc)
             .HasDefaultValueSql("SYSUTCDATETIME()");
 
+        modelBuilder.Entity<Appointment>()
+            .Property(a => a.DepositAmount)
+            .HasColumnType("decimal(10,2)");
+
+        modelBuilder.Entity<Appointment>()
+            .Property(a => a.DepositStatus)
+            .HasMaxLength(20)
+            .HasDefaultValue(DepositStatuses.Pending);
+
         modelBuilder.Entity<Notification>()
             .HasOne(n => n.User)
             .WithMany()

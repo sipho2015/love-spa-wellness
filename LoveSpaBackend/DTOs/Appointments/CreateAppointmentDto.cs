@@ -32,4 +32,7 @@ public class CreateAppointmentDto
 
     [MaxLength(1200)]
     public string? HealthConcerns { get; set; }
+
+    [MaxLength(120)]
+    public string? PaymentReference { get; set; }
 }

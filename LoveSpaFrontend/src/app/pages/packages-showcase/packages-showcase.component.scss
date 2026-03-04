@@ -9,7 +9,12 @@
 .luxury-page {
   font-family: 'Poppins', sans-serif;
   color: var(--dark-charcoal);
-  background: var(--surface-bg);
+  --pkg-text: #2a231d;
+  --pkg-muted: #5f554a;
+  --pkg-heading: #201a14;
+  background:
+    radial-gradient(circle at 8% 2%, rgba(198, 168, 91, 0.1), transparent 32%),
+    linear-gradient(180deg, var(--surface-bg) 0%, var(--light-bg) 100%);
   line-height: 1.65;
 }
 
@@ -29,7 +34,7 @@
 
 .luxury-page p {
   margin: 0;
-  color: var(--soft-gray);
+  color: var(--pkg-muted);
 }
 
 .luxury-page a,
@@ -107,7 +112,7 @@
 
 .nav-list a {
   position: relative;
-  color: var(--dark-charcoal);
+  color: var(--pkg-heading);
   font-weight: 500;
   font-size: 15px;
 }
@@ -206,7 +211,7 @@
   height: 65vh;
   min-height: 420px;
   background:
-    url('https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1900&q=80')
+    url('https://cdn.pixabay.com/photo/2016/08/11/02/23/massage-therapy-1584711_1280.jpg')
       center / cover no-repeat;
   display: flex;
   align-items: center;
@@ -245,6 +250,7 @@
 ========================================== */
 .intro-strip {
   padding: 54px 0;
+  background: linear-gradient(180deg, rgba(198, 168, 91, 0.06), rgba(198, 168, 91, 0));
 }
 
 .intro-grid {
@@ -257,19 +263,35 @@
   border: 1px solid var(--border-soft);
   border-radius: 10px;
   padding: 26px 24px;
+  background: var(--surface-muted);
+  box-shadow: var(--shadow-soft);
 }
 
 .intro-grid h2 {
   font-size: 28px;
   margin-bottom: 10px;
+  color: var(--pkg-heading);
 }
 
 /* ==========================================
    5. PACKAGES SECTION
 ========================================== */
 .packages-section {
-  background: var(--light-bg);
+  position: relative;
+  background:
+    linear-gradient(180deg, rgba(198, 168, 91, 0.08), rgba(198, 168, 91, 0.02)),
+    var(--light-bg);
   padding: 80px 0;
+}
+
+.packages-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 90% 12%, rgba(198, 168, 91, 0.12), transparent 28%),
+    radial-gradient(circle at 12% 86%, rgba(198, 168, 91, 0.08), transparent 32%);
 }
 
 .section-heading {
@@ -287,6 +309,7 @@
 
 .section-heading h2 {
   font-size: 42px;
+  color: var(--pkg-heading);
 }
 
 .packages-grid {
@@ -300,9 +323,9 @@
   max-width: 720px;
   border: 1px solid var(--border-soft);
   border-radius: 8px;
-  background: var(--surface-bg);
+  background: var(--surface-muted);
   padding: 12px 14px;
-  color: var(--soft-gray);
+  color: var(--pkg-text);
   text-align: center;
 }
 
@@ -314,6 +337,7 @@
 
 .package-card {
   background: var(--surface-bg);
+  border: 1px solid var(--border-soft);
   border-radius: 8px;
   box-shadow: var(--shadow-card);
   overflow: hidden;
@@ -354,11 +378,13 @@
 .card-content h3 {
   font-size: 20px;
   margin-bottom: 10px;
+  color: var(--pkg-heading);
 }
 
 .card-content p {
   font-size: 14px;
   margin-bottom: 16px;
+  color: var(--pkg-text);
 }
 
 .price-line {
@@ -369,7 +395,7 @@
 }
 
 .original-price {
-  color: var(--soft-gray);
+  color: var(--pkg-muted);
   text-decoration: line-through;
   font-size: 13px;
 }
@@ -390,7 +416,7 @@
 
 .includes li {
   font-size: 13px;
-  color: var(--soft-gray);
+  color: var(--pkg-text);
   padding-left: 14px;
   position: relative;
 }
@@ -407,7 +433,7 @@
 }
 
 .card-content a {
-  color: var(--primary-gold);
+  color: #8b6c24;
   font-size: 14px;
   font-weight: 600;
 }
@@ -426,7 +452,7 @@
 ========================================== */
 .promo-section {
   padding: 80px 0;
-  background: var(--surface-bg);
+  background: linear-gradient(180deg, var(--surface-bg), var(--surface-muted));
 }
 
 .promo-grid {
@@ -586,6 +612,12 @@
   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
 }
 
+body.theme-dark .luxury-page {
+  --pkg-text: #f8e8d2;
+  --pkg-muted: #e3d0bb;
+  --pkg-heading: #fff2df;
+}
+
 /* ==========================================
    9. RESPONSIVENESS
 ========================================== */
@@ -640,6 +672,19 @@
 }
 
 @media (max-width: 768px) {
+  .packages-section,
+  .promo-section {
+    padding: 60px 0;
+  }
+
+  .section-heading {
+    margin-bottom: 28px;
+  }
+
+  .section-heading h2 {
+    font-size: 34px;
+  }
+
   .hero h1 {
     font-size: 36px;
   }
@@ -650,20 +695,67 @@
 
   .promo-grid {
     grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .package-card {
+    border-radius: 12px;
+  }
+
+  .card-media img {
+    height: 240px;
+  }
+
+  .card-content {
+    padding: 18px 16px;
+  }
+
+  .card-content h3 {
+    font-size: 22px;
+  }
+
+  .card-content p {
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .includes li {
+    font-size: 14px;
+  }
+
+  .promo-card {
+    min-height: 260px;
+    height: auto;
+    padding: 26px 22px;
+  }
+
+  .promo-card h3 {
+    font-size: 28px;
   }
 }
 
 @media (max-width: 560px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .intro-strip {
+    padding: 42px 0;
+  }
+
   .packages-grid {
     grid-template-columns: 1fr;
+    gap: 18px;
   }
 
   .footer-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .header-inner {
     gap: 12px;
+    min-height: 78px;
   }
 
   .logo {
@@ -680,6 +772,40 @@
 
   .hero-breadcrumb {
     font-size: 11px;
+  }
+
+  .section-heading h2 {
+    font-size: 30px;
+  }
+
+  .price-badge {
+    width: 54px;
+    height: 54px;
+    font-size: 14px;
+  }
+
+  .card-content {
+    padding: 16px 14px;
+  }
+
+  .card-content a {
+    display: inline-flex;
+    padding: 6px 0;
+    font-size: 15px;
+  }
+
+  .state-message {
+    font-size: 14px;
+    padding: 11px 12px;
+  }
+
+  .subscribe-form {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .subscribe-form button {
+    height: 40px;
   }
 }
 

@@ -1,14 +1,35 @@
 <div class="page-shell" [class.page-shell--bare]="isPackagesShowcaseRoute()">
   @if (!isPackagesShowcaseRoute()) {
-  <header class="topbar">
-    <div class="topbar-inner" [class.topbar-inner--backoffice]="isBackOfficeRole()">
+  <header class="topbar" [class.topbar--home]="showPublicNavigation()">
+    <div
+      class="topbar-inner"
+      [class.topbar-inner--backoffice]="isBackOfficeRole()"
+      [class.topbar-inner--home]="showPublicNavigation()"
+    >
       <a [routerLink]="brandLink" class="brand">
         <img src="/images/love-spa-logo-mark.svg" alt="" class="brand-mark" aria-hidden="true" />
         <span>Love Spa & Wellness</span>
       </a>
+      <button
+        type="button"
+        class="mobile-menu-toggle"
+        (click)="toggleMobileMenu($event)"
+        [attr.aria-expanded]="mobileMenuOpen()"
+        aria-label="Toggle navigation menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
       @if (showPublicNavigation()) {
-      <nav class="topnav" aria-label="Main navigation">
+      <nav
+        class="topnav"
+        [class.topnav--open]="mobileMenuOpen()"
+        [class.topnav--home]="showPublicNavigation()"
+        aria-label="Main navigation"
+        (click)="closeMobileMenu()"
+      >
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
         <a routerLink="/about" routerLinkActive="active">About</a>
         <a routerLink="/services" routerLinkActive="active">Services</a>
@@ -21,7 +42,21 @@
       <div class="backoffice-spacer" aria-hidden="true"></div>
       }
 
-      <div class="session">
+      <div class="session" [class.session--open]="mobileMenuOpen()" [class.session--home]="showPublicNavigation()">
+        <button
+          type="button"
+          class="theme-toggle-btn"
+          (click)="toggleTheme()"
+          [attr.aria-label]="darkTheme() ? 'Switch to light theme' : 'Switch to dark theme'"
+          [attr.title]="darkTheme() ? 'Switch to light theme' : 'Switch to dark theme'"
+        >
+          @if (darkTheme()) {
+          <span aria-hidden="true">&#9728;</span>
+          } @else {
+          <span aria-hidden="true">&#9790;</span>
+          }
+        </button>
+
         @if (user$ | async) {
         @if (isBackOfficeRole()) {
         @if (hasRole('Admin')) {
@@ -51,10 +86,6 @@
 
           @if (adminMenuOpen()) {
           <div class="admin-menu-dropdown ui-surface">
-            <button type="button" class="admin-menu-item" (click)="toggleTheme()">
-              Theme: {{ darkTheme() ? 'Dark' : 'Light' }}
-            </button>
-            <button type="button" class="admin-menu-item" (click)="openSettings()">Settings</button>
             <button type="button" class="admin-menu-item admin-menu-item--danger" (click)="logoutFromMenu()">
               Logout
             </button>
@@ -76,22 +107,20 @@
   </header>
   }
 
-  @if (settingsOpen() && hasRole('Admin')) {
-  <section class="settings-strip">
-    <div class="settings-strip-inner ui-surface reveal-up">
-      <div class="settings-copy">
-        <p class="ui-kicker">Settings</p>
-        <h3>Admin Preferences</h3>
-        <p>Switch workspace theme and keep your dashboard layout comfortable for daily use.</p>
-      </div>
-
-      <div class="settings-actions">
-        <button type="button" [class.active]="!darkTheme()" (click)="setTheme(false)">Light Theme</button>
-        <button type="button" [class.active]="darkTheme()" (click)="setTheme(true)">Dark Theme</button>
-        <button type="button" class="settings-close" (click)="closeSettings()">Close</button>
-      </div>
-    </div>
-  </section>
+  @if (isPackagesShowcaseRoute()) {
+  <button
+    type="button"
+    class="theme-fab"
+    (click)="toggleTheme()"
+    [attr.aria-label]="darkTheme() ? 'Switch to light theme' : 'Switch to dark theme'"
+    [attr.title]="darkTheme() ? 'Switch to light theme' : 'Switch to dark theme'"
+  >
+    @if (darkTheme()) {
+    <span aria-hidden="true">&#9728;</span>
+    } @else {
+    <span aria-hidden="true">&#9790;</span>
+    }
+  </button>
   }
 
   <main class="content" [class.content--bare]="isPackagesShowcaseRoute()">
@@ -143,8 +172,37 @@
       <div class="footer-meta-links">
         <a routerLink="/privacy-policy">Privacy Policy</a>
         <a routerLink="/terms">Terms</a>
-        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
-        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+      </div>
+
+      <div class="footer-social-icons" aria-label="Social media">
+        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm0 2A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4h-9Zm9.75 1.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"
+            />
+          </svg>
+        </a>
+        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M13.5 21v-8h2.8l.4-3h-3.2V8.1c0-.9.3-1.6 1.7-1.6H17V3.8c-.8-.1-1.7-.2-2.6-.2-2.6 0-4.4 1.5-4.4 4.3V10H7.2v3H10v8h3.5Z"
+            />
+          </svg>
+        </a>
+        <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M14.2 3h2.4c.2 1.1.8 2.1 1.6 2.9.8.7 1.8 1.2 2.8 1.3v2.5a7.8 7.8 0 0 1-3.9-1.3v6.1a5.5 5.5 0 1 1-4.8-5.5v2.5a3 3 0 1 0 2 2.9V3Z"
+            />
+          </svg>
+        </a>
+        <a href="https://wa.me/263789652298" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 3a9 9 0 0 1 7.8 13.4L21 21l-4.7-1.2A9 9 0 1 1 12 3Zm0 2a7 7 0 0 0-6 10.7l.3.5-.8 2.8 2.8-.7.5.3A7 7 0 1 0 12 5Zm-3.4 3.8c.2-.4.4-.4.7-.4h.6c.2 0 .4 0 .5.3l.8 1.9c.1.2.1.4 0 .6l-.4.5-.3.3c-.1.1-.2.2-.1.4.2.4.6 1.1 1.3 1.7.8.7 1.4 1 1.8 1.2.2.1.3 0 .4-.1l.6-.7c.1-.1.3-.2.5-.1l1.9.9c.2.1.4.2.4.4 0 .2 0 1-.7 1.4-.6.4-1.3.4-1.8.3a7.7 7.7 0 0 1-4.8-3.4 5.8 5.8 0 0 1-.8-2.9c0-1 .5-1.6.7-1.8Z"
+            />
+          </svg>
+        </a>
       </div>
       <p>&copy; {{ year }} Love Spa & Wellness. All rights reserved.</p>
     </div>

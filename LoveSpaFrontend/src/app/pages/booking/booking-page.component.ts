@@ -18,6 +18,8 @@ interface BookingSummary {
   appointmentDate: string;
   timeSlot: string;
   customerName: string;
+  depositAmount: number;
+  depositStatus: string;
 }
 
 @Component({
@@ -47,7 +49,8 @@ export class BookingPageComponent implements OnInit, OnDestroy {
     appointmentDate: ['', [Validators.required]],
     timeSlot: ['', [Validators.required, Validators.maxLength(60)]],
     allergies: ['', [Validators.maxLength(500)]],
-    healthConcerns: ['', [Validators.maxLength(1200)]]
+    healthConcerns: ['', [Validators.maxLength(1200)]],
+    paymentReference: ['', [Validators.maxLength(120)]]
   });
 
   services: SpaService[] = [];
@@ -172,6 +175,10 @@ export class BookingPageComponent implements OnInit, OnDestroy {
       payload.healthConcerns = value.healthConcerns.trim();
     }
 
+    if (value.paymentReference.trim()) {
+      payload.paymentReference = value.paymentReference.trim();
+    }
+
     const summary = this.buildSummary({
       serviceId: Number(value.serviceId),
       therapistId: Number(value.therapistId),
@@ -182,9 +189,13 @@ export class BookingPageComponent implements OnInit, OnDestroy {
 
     this.loading = true;
     this.appointmentsApi.create(payload).subscribe({
-      next: () => {
+      next: (created) => {
         this.submitSuccess = 'Appointment request submitted successfully.';
-        this.latestBookingSummary = summary;
+        this.latestBookingSummary = {
+          ...summary,
+          depositAmount: created.depositAmount,
+          depositStatus: created.depositStatus
+        };
         this.startSuccessDismissTimer();
         const currentName = this.authService.currentUser?.fullName ?? '';
         const currentEmail = this.authService.currentUser?.email ?? '';
@@ -197,7 +208,8 @@ export class BookingPageComponent implements OnInit, OnDestroy {
           appointmentDate: '',
           timeSlot: '',
           allergies: '',
-          healthConcerns: ''
+          healthConcerns: '',
+          paymentReference: ''
         });
         this.availableTimeSlots = [];
         this.availabilityMessage = '';
@@ -364,7 +376,9 @@ export class BookingPageComponent implements OnInit, OnDestroy {
       therapistName,
       customerName,
       appointmentDate: value.appointmentDate,
-      timeSlot: value.timeSlot
+      timeSlot: value.timeSlot,
+      depositAmount: 0,
+      depositStatus: 'Pending'
     };
   }
 }
