@@ -1,40 +1,4 @@
 <div class="luxury-page">
-  <header class="site-header" id="home" [class.scrolled]="headerScrolled">
-    <div class="container header-inner">
-      <a class="logo" routerLink="/">
-        <img src="/images/love-spa-logo-mark.svg" alt="" aria-hidden="true" width="38" height="38" style="margin-right: 10px" />
-        <span>Love Spa & Wellness</span>
-      </a>
-
-      <button class="menu-toggle" type="button" aria-label="Toggle menu" [attr.aria-expanded]="menuOpen" (click)="toggleMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-      <nav class="site-nav" aria-label="Main navigation" [class.is-open]="menuOpen">
-        <ul class="nav-list">
-          <li><a routerLink="/" (click)="closeMenu()">Home</a></li>
-          <li><a routerLink="/about" (click)="closeMenu()">About</a></li>
-          <li><a routerLink="/services" (click)="closeMenu()">Services</a></li>
-          <li><a routerLink="/packages" (click)="closeMenu()">Packages</a></li>
-          <li><a routerLink="/booking" (click)="closeMenu()">Booking</a></li>
-        </ul>
-      </nav>
-
-      <div class="header-actions">
-        <button class="search-btn" type="button" aria-label="Search" (click)="onSearch()">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              d="M10.5 3.75a6.75 6.75 0 1 0 4.244 11.99l4.258 4.259a.75.75 0 1 0 1.06-1.06l-4.26-4.26A6.75 6.75 0 0 0 10.5 3.75Zm0 1.5a5.25 5.25 0 1 1 0 10.5 5.25 5.25 0 0 1 0-10.5Z"
-            />
-          </svg>
-        </button>
-        <a class="book-btn" href="#packages">Book Now</a>
-      </div>
-    </div>
-  </header>
-
   @if (toastMessage) {
   <div class="toast">{{ toastMessage }}</div>
   }
@@ -45,7 +9,9 @@
       <div class="container hero-content">
         <p class="hero-breadcrumb">LOVE SPA / PACKAGES</p>
         <h1>PACKAGES</h1>
+        <p>Curated treatments and wellness escapes designed for deep rest and balanced renewal.</p>
       </div>
+
     </section>
 
     <section class="intro-strip" id="about">
@@ -105,16 +71,21 @@
 
     <section class="promo-section">
       <div class="container promo-grid">
-        @for (promo of promos; track promo.heading) {
+        @for (item of promoPackages(); track item.id; let i = $index) {
         <article
           class="promo-card"
           [style.background-image]="
-            'linear-gradient(90deg, rgba(0,0,0,0.7), rgba(0,0,0,0.25)), url(' + promo.imageUrl + ')'
+            'linear-gradient(90deg, rgba(0,0,0,0.7), rgba(0,0,0,0.25)), url(' + packageImage(item, i + 2) + ')'
           "
         >
-          <p>10% Off</p>
-          <h3>{{ promo.heading }}</h3>
-          <a href="#contact">Book Now</a>
+          <p>{{ discountPercent(item) > 0 ? discountPercent(item) + '% Off' : 'Featured Package' }}</p>
+          <h3>{{ item.name }}</h3>
+          <p class="promo-summary">{{ item.description }}</p>
+          <p class="promo-meta">
+            {{ item.packagePrice | currency : 'USD' : 'symbol' : '1.0-0' }}
+            <span>for {{ item.durationMinutes }} mins</span>
+          </p>
+          <a routerLink="/booking">Book Now</a>
         </article>
         }
       </div>
@@ -136,9 +107,10 @@
         <h4>Quick Links</h4>
         <ul>
           <li><a href="#home">Home</a></li>
-          <li><a routerLink="/about">About</a></li>
-          <li><a href="#services">Services</a></li>
           <li><a href="#packages">Packages</a></li>
+          <li><a routerLink="/booking">Bookings</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a routerLink="/about">About</a></li>
           <li><a routerLink="/privacy-policy">Privacy Policy</a></li>
           <li><a routerLink="/terms">Terms</a></li>
         </ul>
@@ -149,6 +121,10 @@
         <ul class="info-list">
           <li><span>&#10022;</span> <a href="mailto:siphomoyo893@gmail.com">siphomoyo893@gmail.com</a></li>
           <li><span>&#10022;</span> <a href="tel:+263789652298">+263 789 652 298</a></li>
+          <li>
+            <span>&#10022;</span>
+            <button type="button" class="contact-chooser-btn" (click)="openContactChooser()">Contact Us</button>
+          </li>
           <li><span>&#10022;</span> Victoria falls Zim</li>
         </ul>
       </section>
@@ -172,5 +148,34 @@
       <p>&copy; {{ year }} Love Spa & Wellness. All rights reserved.</p>
     </div>
   </footer>
+
+  @if (contactChooserOpen) {
+  <div class="contact-modal-overlay" (click)="closeContactChooser()">
+    <section
+      class="contact-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Choose contact method"
+      (click)="$event.stopPropagation()"
+    >
+      <h3>Choose Contact Method</h3>
+      <p>How would you like to reach Love Spa & Wellness?</p>
+      <div class="contact-modal-actions">
+        <a href="tel:+263789652298" class="modal-action" (click)="closeContactChooser()">Call</a>
+        <a href="sms:+263789652298" class="modal-action" (click)="closeContactChooser()">Text</a>
+        <a
+          href="https://wa.me/263789652298?text=Hello%20Love%20Spa%20%26%20Wellness"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="modal-action modal-action--primary"
+          (click)="closeContactChooser()"
+        >
+          WhatsApp
+        </a>
+      </div>
+      <button type="button" class="contact-modal-close" (click)="closeContactChooser()">Close</button>
+    </section>
+  </div>
+  }
 </div>
 

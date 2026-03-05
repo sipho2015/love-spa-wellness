@@ -9,6 +9,37 @@
         for a smooth and elegant booking experience.
       </p>
     </div>
+
+    <article class="hero-booking-card" aria-label="Quick booking">
+      <div class="booking-field">
+        <label for="booking-hero-service">Service</label>
+        <select id="booking-hero-service" name="service">
+          <option selected>Signature Massage</option>
+          <option>Hydrotherapy Ritual</option>
+          <option>Facial &amp; Skin Glow</option>
+          <option>Couples Retreat</option>
+        </select>
+      </div>
+
+      <div class="booking-field">
+        <label for="booking-hero-date">Preferred Date</label>
+        <input id="booking-hero-date" name="date" type="date" />
+      </div>
+
+      <div class="booking-field">
+        <label for="booking-hero-guests">Guests</label>
+        <select id="booking-hero-guests" name="guests">
+          <option value="1" selected>1 Guest</option>
+          <option value="2">2 Guests</option>
+          <option value="3">3 Guests</option>
+          <option value="4">4+ Guests</option>
+        </select>
+      </div>
+
+      <div class="booking-field booking-field--action">
+        <a href="#booking-form" class="hero-book-now">Book Now</a>
+      </div>
+    </article>
   </header>
 
   <div class="booking-layout">
@@ -35,7 +66,7 @@
       </section>
     </aside>
 
-    <form [formGroup]="bookingForm" (ngSubmit)="submit()" class="booking-form ui-surface reveal-up delay-2">
+    <form id="booking-form" [formGroup]="bookingForm" (ngSubmit)="submit()" class="booking-form ui-surface reveal-up delay-2">
       <div class="form-head">
         <p class="ui-kicker">Secure Booking</p>
         <h2>Booking Form</h2>

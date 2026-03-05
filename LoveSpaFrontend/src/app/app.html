@@ -1,11 +1,7 @@
 <div class="page-shell" [class.page-shell--bare]="isPackagesShowcaseRoute()">
   @if (!isPackagesShowcaseRoute()) {
-  <header class="topbar" [class.topbar--home]="showPublicNavigation()">
-    <div
-      class="topbar-inner"
-      [class.topbar-inner--backoffice]="isBackOfficeRole()"
-      [class.topbar-inner--home]="showPublicNavigation()"
-    >
+  <header class="topbar">
+    <div class="topbar-inner" [class.topbar-inner--backoffice]="isBackOfficeRole()">
       <a [routerLink]="brandLink" class="brand">
         <img src="/images/love-spa-logo-mark.svg" alt="" class="brand-mark" aria-hidden="true" />
         <span>Love Spa & Wellness</span>
@@ -26,23 +22,22 @@
       <nav
         class="topnav"
         [class.topnav--open]="mobileMenuOpen()"
-        [class.topnav--home]="showPublicNavigation()"
         aria-label="Main navigation"
         (click)="closeMobileMenu()"
       >
         <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-        <a routerLink="/about" routerLinkActive="active">About</a>
-        <a routerLink="/services" routerLinkActive="active">Services</a>
         <a routerLink="/packages" routerLinkActive="active">Packages</a>
         @if (canSeeBooking()) {
-        <a routerLink="/booking" routerLinkActive="active">Booking</a>
+        <a routerLink="/booking" routerLinkActive="active">Bookings</a>
         }
+        <a routerLink="/services" routerLinkActive="active">Services</a>
+        <a routerLink="/about" routerLinkActive="active">About</a>
       </nav>
       } @else {
       <div class="backoffice-spacer" aria-hidden="true"></div>
       }
 
-      <div class="session" [class.session--open]="mobileMenuOpen()" [class.session--home]="showPublicNavigation()">
+      <div class="session" [class.session--open]="mobileMenuOpen()">
         <button
           type="button"
           class="theme-toggle-btn"
@@ -141,11 +136,11 @@
         <h4>Quick Links</h4>
         <ul>
           <li><a routerLink="/">Home</a></li>
+          <li><a routerLink="/packages">Packages</a></li>
+          <li><a routerLink="/booking">Bookings</a></li>
+          <li><a routerLink="/services">Services</a></li>
           <li><a routerLink="/about">About</a></li>
           <li><a [routerLink]="['/']" fragment="resources">Resources</a></li>
-          <li><a routerLink="/services">Services</a></li>
-          <li><a routerLink="/packages">Packages</a></li>
-          <li><a routerLink="/booking">Booking</a></li>
         </ul>
       </section>
 
@@ -154,6 +149,7 @@
         <ul class="info-list">
           <li><a href="mailto:siphomoyo893@gmail.com">siphomoyo893@gmail.com</a></li>
           <li><a href="tel:+263789652298">+263 789 652 298</a></li>
+          <li><button type="button" class="contact-chooser-btn" (click)="openContactChooser()">Contact Us</button></li>
           <li>Victoria falls Zim</li>
         </ul>
       </section>
@@ -207,6 +203,35 @@
       <p>&copy; {{ year }} Love Spa & Wellness. All rights reserved.</p>
     </div>
   </footer>
+  }
+
+  @if (contactChooserOpen()) {
+  <div class="contact-modal-overlay" (click)="closeContactChooser()">
+    <section
+      class="contact-modal ui-surface"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Choose contact method"
+      (click)="$event.stopPropagation()"
+    >
+      <h3>Choose Contact Method</h3>
+      <p>How would you like to reach Love Spa & Wellness?</p>
+      <div class="contact-modal-actions">
+        <a href="tel:+263789652298" class="ui-btn ui-btn-muted" (click)="closeContactChooser()">Call</a>
+        <a href="sms:+263789652298" class="ui-btn ui-btn-muted" (click)="closeContactChooser()">Text</a>
+        <a
+          href="https://wa.me/263789652298?text=Hello%20Love%20Spa%20%26%20Wellness"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="ui-btn ui-btn-primary"
+          (click)="closeContactChooser()"
+        >
+          WhatsApp
+        </a>
+      </div>
+      <button type="button" class="contact-modal-close" (click)="closeContactChooser()">Close</button>
+    </section>
+  </div>
   }
 </div>
 

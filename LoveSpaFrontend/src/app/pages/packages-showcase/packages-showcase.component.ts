@@ -5,11 +5,6 @@ import { RouterLink } from '@angular/router';
 import { SpaPackage } from '../../core/models/package.models';
 import { SpaPackagesApiService } from '../../core/services/spa-packages-api.service';
 
-interface PromoBanner {
-  heading: string;
-  imageUrl: string;
-}
-
 @Component({
   selector: 'app-packages-showcase',
   standalone: true,
@@ -25,6 +20,7 @@ export class PackagesShowcaseComponent implements OnInit {
   toastMessage = '';
   loadingPackages = false;
   packagesError = '';
+  contactChooserOpen = false;
   readonly year = new Date().getFullYear();
   readonly fallbackPackageImages = [
     'https://cdn.pixabay.com/photo/2019/09/16/17/18/spa-4481538_1280.jpg',
@@ -37,22 +33,14 @@ export class PackagesShowcaseComponent implements OnInit {
 
   spaPackages: SpaPackage[] = [];
 
-  readonly promos: PromoBanner[] = [
-    {
-      heading: 'Relax & Restore Package',
-      imageUrl:
-        'https://cdn.pixabay.com/photo/2018/11/14/03/35/kerzen-3814228_1280.jpg'
-    },
-    {
-      heading: 'Glow & Renewal Ritual',
-      imageUrl:
-        'https://cdn.pixabay.com/photo/2016/11/14/03/06/woman-1822468_1280.jpg'
-    }
-  ];
-
   @HostListener('window:scroll')
   onWindowScroll(): void {
     this.headerScrolled = window.scrollY > 8;
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    this.closeContactChooser();
   }
 
   ngOnInit(): void {
@@ -82,6 +70,14 @@ export class PackagesShowcaseComponent implements OnInit {
     this.showToast('Thank you for subscribing to Love Spa & Wellness updates.');
   }
 
+  openContactChooser(): void {
+    this.contactChooserOpen = true;
+  }
+
+  closeContactChooser(): void {
+    this.contactChooserOpen = false;
+  }
+
   packageImage(item: SpaPackage, index: number): string {
     const candidate = item.imageUrl?.trim();
     if (!candidate || candidate.includes('images.unsplash.com')) {
@@ -89,6 +85,18 @@ export class PackagesShowcaseComponent implements OnInit {
     }
 
     return candidate;
+  }
+
+  promoPackages(): SpaPackage[] {
+    return this.spaPackages.slice(0, 2);
+  }
+
+  discountPercent(item: SpaPackage): number {
+    if (item.originalPrice <= 0 || item.savingsAmount <= 0) {
+      return 0;
+    }
+
+    return Math.round((item.savingsAmount / item.originalPrice) * 100);
   }
 
   private loadPackages(): void {
