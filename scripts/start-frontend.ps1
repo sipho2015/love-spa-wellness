@@ -3,7 +3,8 @@ $ErrorActionPreference = "Stop"
 
 Push-Location "$PSScriptRoot\..\LoveSpaFrontend"
 try {
-    npm start
+    # Use npm.cmd to avoid PowerShell execution policy blocks on npm.ps1.
+    npm.cmd start
 } finally {
     Pop-Location
 }
