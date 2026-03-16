@@ -109,11 +109,11 @@ export class App {
   }
 
   showSiteFooter(): boolean {
-    return !this.isPackagesShowcaseRoute() && this.showPublicNavigation();
+    return true;
   }
 
   isPackagesShowcaseRoute(): boolean {
-    return this.currentRoute().startsWith('/packages');
+    return false;
   }
 
   logout(): void {
@@ -133,6 +133,13 @@ export class App {
 
   @HostListener('document:click')
   onDocumentClick(): void {
+    this.closeAdminMenu();
+    this.closeMobileMenu();
+    this.closeNotifications();
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
     this.closeAdminMenu();
     this.closeMobileMenu();
     this.closeNotifications();

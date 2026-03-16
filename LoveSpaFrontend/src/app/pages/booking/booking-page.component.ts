@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, DestroyRef, OnDestroy, OnInit, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -35,6 +35,7 @@ export class BookingPageComponent implements OnInit, OnDestroy {
   private readonly therapistApi = inject(TherapistApiService);
   private readonly appointmentsApi = inject(AppointmentApiService);
   private readonly authService = inject(AuthService);
+  private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly minDate = new Date().toISOString().slice(0, 10);
@@ -129,6 +130,15 @@ export class BookingPageComponent implements OnInit, OnDestroy {
 
   isTimeSlotSelected(slot: string): boolean {
     return this.f.timeSlot.value === slot;
+  }
+
+  scrollToBookingForm(): void {
+    const form = this.document.getElementById('booking-form');
+    if (!form) {
+      return;
+    }
+
+    form.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   submit(): void {
