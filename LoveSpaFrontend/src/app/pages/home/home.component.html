@@ -133,7 +133,7 @@
         Partner with Love Spa & Wellness to feature your retreat for high-intent wellness travelers.
       </p>
       <a
-        href="mailto:siphomoyo893@gmail.com?subject=Partnership%20Inquiry%20-%20Love%20Spa%20%26%20Wellness"
+        [href]="partnerMailto"
         class="ui-btn ui-btn-muted"
       >
         Partner With Us
@@ -141,7 +141,7 @@
     </article>
     <article class="partner-visual ui-surface">
       <img
-        src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1400&q=80"
+        src="/images/spa-bg-mist.svg"
         alt="Spa treatment setup"
         loading="lazy"
         decoding="async"
@@ -158,10 +158,10 @@
           title="Love Spa Location Map"
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=Victoria%20Falls%20Zimbabwe&output=embed"
+          [src]="mapEmbedUrl"
         ></iframe>
       </div>
-      <p class="contact-note">Victoria Falls, Zimbabwe | Daily by appointment</p>
+      <p class="contact-note">{{ contactNote }}</p>
     </article>
 
     <article class="contact-form ui-surface">
@@ -215,3 +215,4 @@
     </article>
   </section>
 </section>
+

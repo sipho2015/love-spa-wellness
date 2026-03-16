@@ -13,12 +13,9 @@ import { SpaServicesApiService } from '../../core/services/spa-services-api.serv
 })
 export class ServicesPageComponent implements OnInit {
   private readonly serviceCardImages = [
-    'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1556229162-5c63ed9c4efb?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1600334129128-685c5582fd35?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=80',
-    'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=900&q=80'
+    '/images/spa-bg-mist.svg',
+    '/images/spa-leaf-frame.svg',
+    '/images/spa-zen-stones.svg'
   ];
 
   services: SpaService[] = [];
@@ -54,3 +51,4 @@ export class ServicesPageComponent implements OnInit {
     });
   }
 }
+

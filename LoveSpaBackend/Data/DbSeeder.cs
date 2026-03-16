@@ -68,7 +68,7 @@ public static class DbSeeder
                         OriginalPrice = 168.00m,
                         PackagePrice = 149.00m,
                         ImageUrl =
-                            "https://cdn.pixabay.com/photo/2019/09/16/17/18/spa-4481538_1280.jpg",
+                            "/images/spa-bg-mist.svg",
                         IsActive = true,
                         PackageServices =
                         [
@@ -84,7 +84,7 @@ public static class DbSeeder
                         OriginalPrice = 208.00m,
                         PackagePrice = 179.00m,
                         ImageUrl =
-                            "https://cdn.pixabay.com/photo/2017/05/30/19/42/skincare-2357980_1280.jpg",
+                            "/images/spa-bg-mist.svg",
                         IsActive = true,
                         PackageServices =
                         [
@@ -100,7 +100,7 @@ public static class DbSeeder
                         OriginalPrice = 287.00m,
                         PackagePrice = 239.00m,
                         ImageUrl =
-                            "https://cdn.pixabay.com/photo/2018/11/14/03/35/kerzen-3814228_1280.jpg",
+                            "/images/spa-bg-mist.svg",
                         IsActive = true,
                         PackageServices =
                         [
@@ -228,4 +228,5 @@ public static class DbSeeder
         }
     }
 }
+
 

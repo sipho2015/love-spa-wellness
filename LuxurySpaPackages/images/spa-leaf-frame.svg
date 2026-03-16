@@ -1,0 +1,24 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="leaf" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#D8AFAC" stop-opacity="0.58"/>
+      <stop offset="1" stop-color="#B86A82" stop-opacity="0.42"/>
+    </linearGradient>
+  </defs>
+
+  <g opacity="0.7">
+    <path d="M96 790C200 660 218 536 204 404C195 318 166 236 101 168" stroke="url(#leaf)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M166 640C236 612 284 558 315 472C278 469 236 485 196 520C160 551 144 590 166 640Z" fill="url(#leaf)"/>
+    <path d="M122 516C170 508 214 481 253 431C216 416 177 416 141 432C110 446 93 473 122 516Z" fill="url(#leaf)"/>
+    <path d="M116 390C162 381 200 349 231 302C193 289 157 292 126 311C100 329 85 355 116 390Z" fill="url(#leaf)"/>
+    <path d="M140 272C180 264 212 236 236 194C202 184 170 188 145 205C123 220 109 241 140 272Z" fill="url(#leaf)"/>
+  </g>
+
+  <g opacity="0.62">
+    <path d="M1094 20C990 154 972 278 986 406C995 491 1024 573 1089 642" stroke="url(#leaf)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M1024 170C954 198 906 252 875 338C912 341 954 325 994 290C1030 259 1046 220 1024 170Z" fill="url(#leaf)"/>
+    <path d="M1068 294C1020 302 976 329 937 379C974 394 1013 394 1049 378C1080 364 1097 337 1068 294Z" fill="url(#leaf)"/>
+    <path d="M1074 420C1028 429 990 461 959 508C997 521 1033 518 1064 499C1090 481 1105 455 1074 420Z" fill="url(#leaf)"/>
+    <path d="M1050 538C1010 546 978 574 954 616C988 626 1020 622 1045 605C1067 590 1081 569 1050 538Z" fill="url(#leaf)"/>
+  </g>
+</svg>

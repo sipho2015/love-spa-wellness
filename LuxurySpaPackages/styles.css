@@ -218,7 +218,7 @@ ul {
   height: 65vh;
   min-height: 420px;
   background:
-    url('https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1900&q=80')
+    url('images/spa-bg-mist.svg')
       center / cover no-repeat;
   display: flex;
   align-items: center;
@@ -622,3 +622,4 @@ ul {
     font-size: 11px;
   }
 }
+
