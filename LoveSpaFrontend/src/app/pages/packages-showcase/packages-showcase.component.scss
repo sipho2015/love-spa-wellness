@@ -1,74 +1,21 @@
-/* ==========================================
-   1. RESET + GLOBAL DESIGN SYSTEM
-========================================== */
 :host {
   --shadow-card: var(--shadow-soft);
   --shadow-card-hover: var(--shadow-strong);
 }
-
 .luxury-page {
   font-family: 'Poppins', sans-serif;
   color: var(--dark-charcoal);
   --pkg-text: #2a231d;
   --pkg-muted: #5f554a;
   --pkg-heading: #201a14;
-  background:
-    radial-gradient(circle at 8% 2%, rgba(198, 168, 91, 0.1), transparent 32%),
+  background: radial-gradient(circle at 8% 2%, rgba(198, 168, 91, 0.1), transparent 32%),
     linear-gradient(180deg, var(--surface-bg) 0%, var(--light-bg) 100%);
   line-height: 1.65;
 }
-
-.luxury-page * {
+.luxury-page *,
+.container {
   box-sizing: border-box;
 }
-
-.luxury-page h1,
-.luxury-page h2,
-.luxury-page h3,
-.luxury-page h4 {
-  margin: 0 0 0.75rem;
-  font-family: 'Playfair Display', serif;
-  line-height: 1.2;
-  font-weight: 600;
-}
-
-.luxury-page p {
-  margin: 0;
-  color: var(--pkg-muted);
-}
-
-.luxury-page a,
-.luxury-page button,
-.luxury-page input,
-.luxury-page img {
-  transition: all 0.3s ease-in-out;
-}
-
-.luxury-page a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.luxury-page img {
-  display: block;
-  max-width: 100%;
-}
-
-.luxury-page ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.container {
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 20px;
-}
-
-/* ==========================================
-   2. HEADER
-========================================== */
 .site-header {
   position: sticky;
   top: 0;
@@ -76,72 +23,43 @@
   background: var(--surface-bg);
   border-bottom: 1px solid transparent;
 }
-
-.site-header.scrolled {
-  border-bottom-color: var(--border-soft);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-}
-
 .header-inner {
   min-height: 86px;
   display: flex;
   align-items: center;
   gap: 24px;
 }
-
 .logo {
-  display: inline-flex;
-  align-items: center;
   font-family: 'Playfair Display', serif;
   font-size: 24px;
   font-weight: 600;
   color: var(--dark-charcoal);
 }
-
 .site-nav {
   flex: 1;
   display: flex;
   justify-content: center;
 }
-
 .nav-list {
   display: flex;
   align-items: center;
   gap: 26px;
 }
-
 .nav-list a {
-  position: relative;
   color: var(--pkg-heading);
   font-weight: 500;
   font-size: 15px;
+  position: relative;
 }
-
-.nav-list a::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 0;
-  height: 2px;
-  background: var(--primary-gold);
-}
-
 .nav-list a:hover {
   color: var(--primary-gold);
 }
-
-.nav-list a:hover::after {
-  width: 100%;
-}
-
 .header-actions {
   display: flex;
   align-items: center;
   gap: 14px;
   margin-left: auto;
 }
-
 .search-btn {
   width: 40px;
   height: 40px;
@@ -151,23 +69,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
 }
-
-.search-btn svg {
-  width: 18px;
-  height: 18px;
-  fill: var(--dark-charcoal);
-}
-
-.search-btn:hover {
-  border-color: var(--primary-gold);
-}
-
-.search-btn:hover svg {
-  fill: var(--primary-gold);
-}
-
 .book-btn {
   background: var(--primary-gold);
   color: var(--white);
@@ -176,36 +78,6 @@
   font-size: 14px;
   font-weight: 600;
 }
-
-.book-btn:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.04);
-}
-
-.menu-toggle {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  width: 42px;
-  height: 42px;
-  border: 1px solid var(--border-soft);
-  border-radius: 8px;
-  background: var(--surface-bg);
-  cursor: pointer;
-  margin-left: auto;
-}
-
-.menu-toggle span {
-  width: 20px;
-  height: 2px;
-  background: var(--dark-charcoal);
-  margin: 0 auto;
-}
-
-/* ==========================================
-   3. HERO
-========================================== */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -220,12 +92,10 @@
   align-items: center;
   justify-content: center;
 }
-
 .hero-overlay {
   position: absolute;
   inset: 0;
 }
-
 .hero-content {
   position: relative;
   z-index: 2;
@@ -238,123 +108,29 @@
   justify-items: center;
   gap: 14px;
 }
-
-.hero-breadcrumb {
-  color: rgba(252, 246, 236, 0.94);
-  letter-spacing: 2px;
-  font-size: 0.78rem;
-  font-weight: 500;
-  margin: 0;
-  text-transform: uppercase;
-}
-
-.hero h1 {
-  color: #fffaf2;
-  font-size: clamp(2.1rem, 5vw, 4rem);
-  line-height: 1.1;
-  max-width: 18ch;
-  text-wrap: balance;
-  margin: 0;
-}
-
-.hero-content p {
-  color: rgba(255, 247, 236, 0.9);
-  max-width: 64ch;
-  font-size: clamp(1rem, 1.5vw, 1.15rem);
-  margin: 0;
-}
-
-/* ==========================================
-   4. INTRO STRIP
-========================================== */
 .intro-strip {
   margin-top: 0;
   padding: 54px 0;
   background: linear-gradient(180deg, rgba(198, 168, 91, 0.06), rgba(198, 168, 91, 0));
 }
-
 .intro-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 30px;
 }
-
-.intro-grid article {
-  border: 1px solid var(--border-soft);
-  border-radius: 10px;
-  padding: 26px 24px;
-  background: var(--surface-muted);
-  box-shadow: var(--shadow-soft);
-}
-
-.intro-grid h2 {
-  font-size: 28px;
-  margin-bottom: 10px;
-  color: var(--pkg-heading);
-}
-
-/* ==========================================
-   5. PACKAGES SECTION
-========================================== */
 .packages-section {
-  position: relative;
-  background:
-    linear-gradient(180deg, rgba(198, 168, 91, 0.08), rgba(198, 168, 91, 0.02)),
-    var(--light-bg);
+  background: linear-gradient(180deg, rgba(198, 168, 91, 0.08), rgba(198, 168, 91, 0.02)), var(--light-bg);
   padding: 80px 0;
 }
-
-.packages-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at 90% 12%, rgba(198, 168, 91, 0.12), transparent 28%),
-    radial-gradient(circle at 12% 86%, rgba(198, 168, 91, 0.08), transparent 32%);
-}
-
 .section-heading {
   text-align: center;
   margin-bottom: 42px;
 }
-
-.overline {
-  color: var(--primary-gold);
-  letter-spacing: 1.8px;
-  text-transform: uppercase;
-  font-size: 12px;
-  margin-bottom: 8px;
-}
-
-.section-heading h2 {
-  font-size: 42px;
-  color: var(--pkg-heading);
-}
-
 .packages-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
 }
-
-.state-message {
-  margin: 0 auto 20px;
-  max-width: 720px;
-  border: 1px solid var(--border-soft);
-  border-radius: 8px;
-  background: var(--surface-muted);
-  padding: 12px 14px;
-  color: var(--pkg-text);
-  text-align: center;
-}
-
-.state-message--error {
-  border-color: #e8cad0;
-  background: #fff2f4;
-  color: #9c3b4c;
-}
-
 .package-card {
   background: var(--surface-bg);
   border: 1px solid var(--border-soft);
@@ -363,18 +139,11 @@
   overflow: hidden;
   position: relative;
 }
-
-.card-media {
-  position: relative;
-  overflow: hidden;
-}
-
 .card-media img {
   width: 100%;
   height: 220px;
   object-fit: cover;
 }
-
 .price-badge {
   position: absolute;
   top: 15px;
@@ -390,42 +159,35 @@
   font-size: 16px;
   font-weight: 600;
 }
-
 .card-content {
   padding: 20px;
 }
-
 .card-content h3 {
   font-size: 20px;
   margin-bottom: 10px;
   color: var(--pkg-heading);
 }
-
 .card-content p {
   font-size: 14px;
   margin-bottom: 16px;
   color: var(--pkg-text);
 }
-
 .price-line {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 12px;
 }
-
 .original-price {
   color: var(--pkg-muted);
   text-decoration: line-through;
   font-size: 13px;
 }
-
 .savings {
   color: var(--accent-text-strong);
   font-size: 13px;
   font-weight: 600;
 }
-
 .includes {
   margin: 0 0 16px;
   padding: 0;
@@ -433,43 +195,21 @@
   display: grid;
   gap: 6px;
 }
-
 .includes li {
   font-size: 13px;
   color: var(--pkg-text);
   padding-left: 14px;
   position: relative;
 }
-
-.includes li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 8px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--primary-gold);
-}
-
 .card-content a {
   color: #8b6c24;
   font-size: 14px;
   font-weight: 600;
 }
-
 .package-card:hover {
   transform: translateY(-8px);
   box-shadow: var(--shadow-card-hover);
 }
-
-.package-card:hover .card-media img {
-  transform: scale(1.05);
-}
-
-/* ==========================================
-   6. PROMOTIONAL SECTION
-========================================== */
 .promo-section {
   padding: 80px 0;
   background: linear-gradient(180deg, var(--surface-bg), var(--surface-muted));
@@ -542,7 +282,6 @@
 
 /* ==========================================
    7. FOOTER
-========================================== */
 .site-footer {
   background: var(--footer-bg);
   padding: 60px 0 0;
@@ -645,7 +384,6 @@
 
 /* ==========================================
    8. TOAST
-========================================== */
 .toast {
   position: fixed;
   right: 18px;
@@ -667,123 +405,18 @@ body.theme-dark .luxury-page {
 
 /* ==========================================
    9. RESPONSIVENESS
-========================================== */
 @media (max-width: 1024px) {
-  .packages-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .promo-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .footer-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .packages-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
-@media (max-width: 860px) {
-  .menu-toggle {
-    display: inline-flex;
-  }
-
-  .site-nav {
-    position: absolute;
-    top: 86px;
-    left: 0;
-    right: 0;
-    background: var(--surface-bg);
-    border-bottom: 1px solid var(--border-soft);
-    max-height: 0;
-    overflow: hidden;
-    flex: none;
-  }
-
-  .site-nav.is-open {
-    max-height: 320px;
-    padding: 12px 0 18px;
-  }
-
-  .nav-list {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .header-actions {
-    gap: 10px;
-  }
-
-  .book-btn {
-    padding: 9px 14px;
-  }
-}
-
 @media (max-width: 768px) {
-  .intro-strip {
-    margin-top: 0;
-  }
-
-  .packages-section,
-  .promo-section {
-    padding: 60px 0;
-  }
-
-  .section-heading {
-    margin-bottom: 28px;
-  }
-
-  .section-heading h2 {
-    font-size: 34px;
-  }
-
-  .hero h1 {
-    font-size: 36px;
-  }
-
-  .intro-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .promo-grid {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-
-  .package-card {
-    border-radius: 12px;
-  }
-
-  .card-media img {
-    height: 240px;
-  }
-
-  .card-content {
-    padding: 18px 16px;
-  }
-
-  .card-content h3 {
-    font-size: 22px;
-  }
-
-  .card-content p {
-    font-size: 15px;
-    line-height: 1.55;
-  }
-
-  .includes li {
-    font-size: 14px;
-  }
-
-  .promo-card {
-    min-height: 260px;
-    height: auto;
-    padding: 26px 22px;
-  }
-
-  .promo-card h3 {
-    font-size: 28px;
-  }
+  .packages-section { padding: 60px 0; }
+  .section-heading { margin-bottom: 28px; }
+  .section-heading h2 { font-size: 34px; }
+  .hero h1 { font-size: 36px; }
+  .intro-grid { grid-template-columns: 1fr; }
+  .packages-grid { grid-template-columns: 1fr; gap: 18px; }
 }
+<<<<<<< HEAD
 
 @media (max-width: 560px) {
   .container {
@@ -861,3 +494,5 @@ body.theme-dark .luxury-page {
     height: 40px;
   }
 }
+=======
+>>>>>>> 0f944b450fc21000f2c3adeda753a4af6c702efe
