@@ -137,6 +137,13 @@ npm start
 
 `npm start` now runs Angular with a proxy so frontend API calls to `/api` are forwarded to the backend.
 
+If PowerShell blocks `npm` with an execution-policy error, use:
+
+```powershell
+npm.cmd install
+npm.cmd start
+```
+
 Default proxy target:
 
 - `http://localhost:5169`
@@ -171,6 +178,12 @@ Frontend tests:
 ```powershell
 cd LoveSpaFrontend
 npm run test -- --watch=false --browsers=ChromeHeadless
+```
+
+If PowerShell blocks `npm`, run:
+
+```powershell
+npm.cmd run test -- --watch=false --browsers=ChromeHeadless
 ```
 
 ## API Notes
