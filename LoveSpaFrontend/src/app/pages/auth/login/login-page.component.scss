@@ -10,7 +10,7 @@
   overflow: hidden;
   background:
     linear-gradient(90deg, rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.25)),
-    url('https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&w=1800&q=80')
+    url('/images/spa-bg-mist.svg')
       center / cover no-repeat;
   box-shadow: var(--shadow-medium);
   display: flex;
@@ -95,3 +95,4 @@ small {
     grid-template-columns: 1fr;
   }
 }
+

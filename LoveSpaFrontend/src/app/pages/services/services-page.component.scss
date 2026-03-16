@@ -13,7 +13,7 @@
   padding: clamp(96px, 12vh, 140px) 20px clamp(72px, 9vh, 110px);
   background:
     linear-gradient(140deg, rgba(20, 17, 14, 0.78) 0%, rgba(20, 17, 14, 0.48) 48%, rgba(20, 17, 14, 0.22) 100%),
-    url('https://images.unsplash.com/photo-1552693673-1bf958298935?auto=format&fit=crop&w=1800&q=80')
+    url('/images/spa-bg-mist.svg')
       center / cover no-repeat;
   display: flex;
   align-items: center;
@@ -163,3 +163,4 @@
     grid-template-columns: 1fr;
   }
 }
+

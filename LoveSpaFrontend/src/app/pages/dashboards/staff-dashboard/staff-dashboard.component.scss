@@ -10,7 +10,7 @@
   overflow: hidden;
   background:
     linear-gradient(90deg, rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.22)),
-    url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1800&q=80')
+    url('/images/spa-bg-mist.svg')
       center / cover no-repeat;
   box-shadow: var(--shadow-medium);
   display: flex;
@@ -89,3 +89,4 @@
     justify-content: flex-end;
   }
 }
+

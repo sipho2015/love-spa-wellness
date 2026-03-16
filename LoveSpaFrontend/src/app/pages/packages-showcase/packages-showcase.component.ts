@@ -3,6 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SpaPackage } from '../../core/models/package.models';
+import { InquiryApiService } from '../../core/services/inquiry-api.service';
 import { SpaPackagesApiService } from '../../core/services/spa-packages-api.service';
 
 @Component({
@@ -14,6 +15,7 @@ import { SpaPackagesApiService } from '../../core/services/spa-packages-api.serv
 })
 export class PackagesShowcaseComponent implements OnInit {
   private readonly packagesApi = inject(SpaPackagesApiService);
+  private readonly inquiryApi = inject(InquiryApiService);
 
   menuOpen = false;
   headerScrolled = false;
@@ -22,12 +24,9 @@ export class PackagesShowcaseComponent implements OnInit {
   packagesError = '';
   readonly year = new Date().getFullYear();
   readonly fallbackPackageImages = [
-    'https://cdn.pixabay.com/photo/2019/09/16/17/18/spa-4481538_1280.jpg',
-    'https://cdn.pixabay.com/photo/2016/08/11/02/23/massage-therapy-1584711_1280.jpg',
-    'https://cdn.pixabay.com/photo/2017/05/30/19/42/skincare-2357980_1280.jpg',
-    'https://cdn.pixabay.com/photo/2014/12/13/18/27/woman-567021_1280.jpg',
-    'https://cdn.pixabay.com/photo/2023/09/01/20/06/spa-8227623_1280.jpg',
-    'https://cdn.pixabay.com/photo/2015/04/20/13/25/massage-731638_1280.jpg'
+    '/images/spa-bg-mist.svg',
+    '/images/spa-leaf-frame.svg',
+    '/images/spa-zen-stones.svg'
   ];
 
   spaPackages: SpaPackage[] = [];
@@ -49,10 +48,6 @@ export class PackagesShowcaseComponent implements OnInit {
     this.menuOpen = false;
   }
 
-  onSearch(): void {
-    this.showToast('Search experience can be connected to your booking catalog.');
-  }
-
   onSubscribe(emailInput: HTMLInputElement): void {
     const email = emailInput.value.trim();
     if (!email) {
@@ -60,13 +55,32 @@ export class PackagesShowcaseComponent implements OnInit {
       return;
     }
 
-    emailInput.value = '';
-    this.showToast('Thank you for subscribing to Love Spa & Wellness updates.');
+    if (!this.isValidEmail(email)) {
+      this.showToast('Please enter a valid email address.');
+      return;
+    }
+
+    this.inquiryApi
+      .create({
+        fullName: 'Website Newsletter Subscriber',
+        email,
+        phone: null,
+        message: 'Please subscribe this email to Love Spa & Wellness updates.'
+      })
+      .subscribe({
+        next: () => {
+          emailInput.value = '';
+          this.showToast('Subscription request sent. We will keep you updated.');
+        },
+        error: () => {
+          this.showToast('Unable to submit right now. Please try again shortly.');
+        }
+      });
   }
 
   packageImage(item: SpaPackage, index: number): string {
     const candidate = item.imageUrl?.trim();
-    if (!candidate || candidate.includes('images.unsplash.com')) {
+    if (!candidate) {
       return this.fallbackPackageImages[index % this.fallbackPackageImages.length];
     }
 
@@ -110,6 +124,11 @@ export class PackagesShowcaseComponent implements OnInit {
       this.toastMessage = '';
     }, 2600);
   }
+
+  private isValidEmail(value: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
 }
+
 
 

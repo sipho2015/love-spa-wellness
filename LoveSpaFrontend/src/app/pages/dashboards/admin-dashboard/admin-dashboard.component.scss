@@ -10,7 +10,7 @@
   overflow: hidden;
   background:
     linear-gradient(90deg, rgba(0, 0, 0, 0.58), rgba(0, 0, 0, 0.2)),
-    url('https://cdn.pixabay.com/photo/2019/09/16/17/18/spa-4481538_1280.jpg') center / cover no-repeat;
+    url('/images/spa-bg-mist.svg') center / cover no-repeat;
   box-shadow: var(--shadow-medium);
   display: flex;
   align-items: flex-end;
@@ -313,3 +313,4 @@ textarea.ui-input {
     grid-template-columns: 1fr;
   }
 }
+

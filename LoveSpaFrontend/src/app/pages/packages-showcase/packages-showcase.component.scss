@@ -214,7 +214,7 @@
   padding: clamp(96px, 12vh, 140px) 20px clamp(72px, 9vh, 110px);
   background:
     linear-gradient(140deg, rgba(20, 17, 14, 0.78) 0%, rgba(20, 17, 14, 0.48) 48%, rgba(20, 17, 14, 0.22) 100%),
-    url('https://cdn.pixabay.com/photo/2016/08/11/02/23/massage-therapy-1584711_1280.jpg')
+    url('/images/spa-bg-mist.svg')
       center / cover no-repeat;
   display: flex;
   align-items: center;
@@ -860,6 +860,4 @@ body.theme-dark .luxury-page {
   .subscribe-form button {
     height: 40px;
   }
-
 }
-
