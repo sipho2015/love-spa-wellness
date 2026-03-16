@@ -10,6 +10,8 @@ import { dashboardRouteForRole } from './core/utils/role-routing';
 import { AuthModalService } from './core/services/auth-modal.service';
 import { AuthModalComponent } from './shared/auth-modal/auth-modal.component';
 import { NotificationApiService } from './core/services/notification-api.service';
+import { DEFAULT_SITE_PROFILE, SiteProfile } from './core/models/site-profile.models';
+import { SiteProfileApiService } from './core/services/site-profile-api.service';
 
 @Component({
   selector: 'app-root',
@@ -24,6 +26,7 @@ export class App {
   private readonly authService = inject(AuthService);
   private readonly authModalService = inject(AuthModalService);
   private readonly notificationApi = inject(NotificationApiService);
+  private readonly siteProfileApi = inject(SiteProfileApiService);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly document = inject(DOCUMENT);
@@ -40,9 +43,11 @@ export class App {
   readonly unreadNotificationCount = signal(0);
   readonly notificationsLoading = signal(false);
   readonly notificationsError = signal('');
+  readonly siteProfile = signal<SiteProfile>(DEFAULT_SITE_PROFILE);
 
   constructor() {
     this.restoreThemePreference();
+    this.loadSiteProfile();
 
     this.router.events
       .pipe(
@@ -71,6 +76,14 @@ export class App {
       this.fetchNotifications(false);
       this.startNotificationPolling();
       });
+  }
+
+  get mailtoSupport(): string {
+    return `mailto:${this.siteProfile().supportEmail}`;
+  }
+
+  get telSupport(): string {
+    return `tel:${this.siteProfile().phoneDial}`;
   }
 
   get dashboardLink(): string {
@@ -335,5 +348,16 @@ export class App {
   private applyTheme(useDark: boolean): void {
     this.darkTheme.set(useDark);
     this.document.body.classList.toggle('theme-dark', useDark);
+  }
+
+  private loadSiteProfile(): void {
+    this.siteProfileApi.get().subscribe({
+      next: (profile) => {
+        this.siteProfile.set(profile);
+      },
+      error: () => {
+        // Keep local defaults when public profile endpoint is unavailable.
+      }
+    });
   }
 }

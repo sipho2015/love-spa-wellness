@@ -5,6 +5,12 @@
   const searchBtn = document.querySelector('.search-btn');
   const subscribeForm = document.querySelector('.subscribe-form');
   const yearEl = document.getElementById('year');
+  const businessNameEl = document.getElementById('business-name');
+  const supportEmailLink = document.getElementById('support-email-link');
+  const supportPhoneLink = document.getElementById('support-phone-link');
+  const supportWhatsAppLink = document.getElementById('support-whatsapp-link');
+  const businessAddressEl = document.getElementById('business-address');
+  const openingHoursList = document.getElementById('opening-hours-list');
 
   const applyHeaderState = () => {
     if (!header) return;
@@ -21,6 +27,49 @@
   if (yearEl) {
     yearEl.textContent = String(new Date().getFullYear());
   }
+
+  const loadSiteProfile = async () => {
+    try {
+      const response = await fetch('/api/public/site-profile');
+      if (!response.ok) {
+        return;
+      }
+
+      const profile = await response.json();
+
+      if (businessNameEl && profile.businessName) {
+        businessNameEl.textContent = profile.businessName;
+      }
+
+      if (supportEmailLink && profile.supportEmail) {
+        supportEmailLink.href = `mailto:${profile.supportEmail}`;
+        supportEmailLink.textContent = profile.supportEmail;
+      }
+
+      if (supportPhoneLink && profile.phoneDial && profile.phoneDisplay) {
+        supportPhoneLink.href = `tel:${profile.phoneDial}`;
+        supportPhoneLink.textContent = profile.phoneDisplay;
+      }
+
+      if (supportWhatsAppLink && profile.whatsAppUrl) {
+        supportWhatsAppLink.href = `${profile.whatsAppUrl}?text=Hello%20Love%20Spa%20%26%20Wellness`;
+      }
+
+      if (businessAddressEl && profile.address) {
+        businessAddressEl.textContent = profile.address;
+      }
+
+      if (openingHoursList && Array.isArray(profile.openingHours) && profile.openingHours.length > 0) {
+        openingHoursList.innerHTML = profile.openingHours
+          .map((hour) => `<li><span>&#10022;</span> ${hour}</li>`)
+          .join('');
+      }
+    } catch {
+      // Keep static fallback values when backend is unreachable.
+    }
+  };
+
+  void loadSiteProfile();
 
   if (menuToggle && siteNav) {
     menuToggle.addEventListener('click', () => {

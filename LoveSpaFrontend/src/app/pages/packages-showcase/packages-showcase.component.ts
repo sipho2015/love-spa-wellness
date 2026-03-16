@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, HostListener, OnInit, inject } from '@angular/core';
+import { Component, HostListener, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { DEFAULT_SITE_PROFILE, SiteProfile } from '../../core/models/site-profile.models';
 import { SpaPackage } from '../../core/models/package.models';
 import { InquiryApiService } from '../../core/services/inquiry-api.service';
+import { SiteProfileApiService } from '../../core/services/site-profile-api.service';
 import { SpaPackagesApiService } from '../../core/services/spa-packages-api.service';
 
 @Component({
@@ -16,6 +18,7 @@ import { SpaPackagesApiService } from '../../core/services/spa-packages-api.serv
 export class PackagesShowcaseComponent implements OnInit {
   private readonly packagesApi = inject(SpaPackagesApiService);
   private readonly inquiryApi = inject(InquiryApiService);
+  private readonly siteProfileApi = inject(SiteProfileApiService);
 
   menuOpen = false;
   headerScrolled = false;
@@ -28,6 +31,7 @@ export class PackagesShowcaseComponent implements OnInit {
     '/images/spa-leaf-frame.svg',
     '/images/spa-zen-stones.svg'
   ];
+  readonly siteProfile = signal<SiteProfile>(DEFAULT_SITE_PROFILE);
 
   spaPackages: SpaPackage[] = [];
 
@@ -38,6 +42,7 @@ export class PackagesShowcaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPackages();
+    this.loadSiteProfile();
   }
 
   toggleMenu(): void {
@@ -99,6 +104,14 @@ export class PackagesShowcaseComponent implements OnInit {
     return Math.round((item.savingsAmount / item.originalPrice) * 100);
   }
 
+  get mailtoSupport(): string {
+    return `mailto:${this.siteProfile().supportEmail}`;
+  }
+
+  get telSupport(): string {
+    return `tel:${this.siteProfile().phoneDial}`;
+  }
+
   private loadPackages(): void {
     this.loadingPackages = true;
     this.packagesError = '';
@@ -128,7 +141,15 @@ export class PackagesShowcaseComponent implements OnInit {
   private isValidEmail(value: string): boolean {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
   }
+
+  private loadSiteProfile(): void {
+    this.siteProfileApi.get().subscribe({
+      next: (profile) => {
+        this.siteProfile.set(profile);
+      },
+      error: () => {
+        // Keep defaults when backend profile endpoint is unavailable.
+      }
+    });
+  }
 }
-
-
-

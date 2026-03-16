@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { DEFAULT_SITE_PROFILE, SiteProfile } from '../../core/models/site-profile.models';
 import { InquiryApiService } from '../../core/services/inquiry-api.service';
+import { SiteProfileApiService } from '../../core/services/site-profile-api.service';
 
 interface GuideCard {
   title: string;
@@ -31,6 +33,8 @@ interface DestinationCard {
 export class HomeComponent {
   private readonly formBuilder = inject(FormBuilder);
   private readonly inquiryApi = inject(InquiryApiService);
+  private readonly siteProfileApi = inject(SiteProfileApiService);
+  readonly siteProfile = signal<SiteProfile>(DEFAULT_SITE_PROFILE);
 
   readonly guideCards: GuideCard[] = [
     {
@@ -104,8 +108,24 @@ export class HomeComponent {
   inquirySuccess = '';
   inquiryError = '';
 
+  constructor() {
+    this.loadSiteProfile();
+  }
+
   get cf() {
     return this.inquiryForm.controls;
+  }
+
+  get partnerMailto(): string {
+    return `mailto:${this.siteProfile().supportEmail}?subject=Partnership%20Inquiry%20-%20Love%20Spa%20%26%20Wellness`;
+  }
+
+  get mapEmbedUrl(): string {
+    return `https://www.google.com/maps?q=${encodeURIComponent(this.siteProfile().address)}&output=embed`;
+  }
+
+  get contactNote(): string {
+    return `${this.siteProfile().address} | Daily by appointment`;
   }
 
   submitInquiry(): void {
@@ -142,6 +162,17 @@ export class HomeComponent {
           this.inquiryError = error?.error?.message ?? 'Unable to send inquiry right now. Please try again shortly.';
         }
       });
+  }
+
+  private loadSiteProfile(): void {
+    this.siteProfileApi.get().subscribe({
+      next: (profile) => {
+        this.siteProfile.set(profile);
+      },
+      error: () => {
+        // Keep defaults when backend profile endpoint is unavailable.
+      }
+    });
   }
 }
 

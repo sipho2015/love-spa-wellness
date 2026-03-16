@@ -95,7 +95,7 @@
   <footer class="site-footer" id="contact">
     <div class="container footer-grid">
       <section>
-        <h4>Love Spa & Wellness</h4>
+        <h4>{{ siteProfile().businessName }}</h4>
         <p>Experience refined wellness in a tranquil modern sanctuary.</p>
         <form class="subscribe-form" (submit)="$event.preventDefault(); onSubscribe(emailInput)">
           <input #emailInput type="email" placeholder="Your email address" aria-label="Email address" />
@@ -119,35 +119,35 @@
       <section>
         <h4>Contact Info</h4>
         <ul class="info-list">
-          <li><span>&#10022;</span> <a href="mailto:siphomoyo893@gmail.com">siphomoyo893@gmail.com</a></li>
-          <li><span>&#10022;</span> <a href="tel:+263789652298">+263 789 652 298</a></li>
+          <li><span>&#10022;</span> <a [href]="mailtoSupport">{{ siteProfile().supportEmail }}</a></li>
+          <li><span>&#10022;</span> <a [href]="telSupport">{{ siteProfile().phoneDisplay }}</a></li>
           <li>
             <span>&#10022;</span>
-            <a href="https://wa.me/263789652298?text=Hello%20Love%20Spa%20%26%20Wellness" target="_blank" rel="noopener noreferrer">
+            <a [href]="siteProfile().whatsAppUrl + '?text=Hello%20Love%20Spa%20%26%20Wellness'" target="_blank" rel="noopener noreferrer">
               WhatsApp Chat
             </a>
           </li>
-          <li><span>&#10022;</span> Victoria Falls, Zimbabwe</li>
+          <li><span>&#10022;</span> {{ siteProfile().address }}</li>
         </ul>
       </section>
 
       <section>
         <h4>Opening Hours</h4>
         <ul class="info-list">
-          <li><span>&#10022;</span> Mon - Fri: 9:00 AM - 8:00 PM</li>
-          <li><span>&#10022;</span> Sat: 10:00 AM - 7:00 PM</li>
-          <li><span>&#10022;</span> Sun: 10:00 AM - 6:00 PM</li>
+          @for (hour of siteProfile().openingHours; track hour) {
+          <li><span>&#10022;</span> {{ hour }}</li>
+          }
         </ul>
       </section>
     </div>
 
     <div class="footer-bottom">
       <p class="footer-links">
-        <a href="https://www.instagram.com/love_spa_wellness/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a [href]="siteProfile().instagramUrl" target="_blank" rel="noopener noreferrer">Instagram</a>
         <span>|</span>
-        <a href="https://wa.me/263789652298" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+        <a [href]="siteProfile().whatsAppUrl" target="_blank" rel="noopener noreferrer">WhatsApp</a>
       </p>
-      <p>&copy; {{ year }} Love Spa & Wellness. All rights reserved.</p>
+      <p>&copy; {{ year }} {{ siteProfile().businessName }}. All rights reserved.</p>
     </div>
   </footer>
 
