@@ -40,7 +40,6 @@ export class App {
   readonly unreadNotificationCount = signal(0);
   readonly notificationsLoading = signal(false);
   readonly notificationsError = signal('');
-  readonly contactChooserOpen = signal(false);
 
   constructor() {
     this.restoreThemePreference();
@@ -141,7 +140,9 @@ export class App {
 
   @HostListener('document:keydown.escape')
   onEscapeKey(): void {
-    this.closeContactChooser();
+    this.closeAdminMenu();
+    this.closeMobileMenu();
+    this.closeNotifications();
   }
 
   @HostListener('window:resize')
@@ -192,14 +193,6 @@ export class App {
 
   closeNotifications(): void {
     this.notificationsOpen.set(false);
-  }
-
-  openContactChooser(): void {
-    this.contactChooserOpen.set(true);
-  }
-
-  closeContactChooser(): void {
-    this.contactChooserOpen.set(false);
   }
 
   markNotificationRead(notification: AppNotification): void {

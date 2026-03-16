@@ -604,109 +604,23 @@
   filter: brightness(1.05);
 }
 
+.info-list {
+  display: grid;
+  gap: 10px;
+}
+
 .info-list li {
-  margin-bottom: 8px;
+  margin-bottom: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.45;
 }
 
 .info-list span {
   color: var(--primary-gold);
-  margin-right: 8px;
-}
-
-.contact-chooser-btn {
-  border: 1px solid var(--footer-input-border);
-  background: transparent;
-  color: var(--footer-text);
-  border-radius: 999px;
-  padding: 5px 11px;
-  font-size: 13px;
-  font-family: inherit;
-  cursor: pointer;
-}
-
-.contact-chooser-btn:hover {
-  border-color: var(--primary-gold);
-  color: var(--primary-gold);
-}
-
-.contact-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 2100;
-  display: grid;
-  place-items: center;
-  padding: 16px;
-  background: rgba(9, 7, 6, 0.62);
-}
-
-.contact-modal {
-  width: min(460px, 100%);
-  border-radius: 12px;
-  border: 1px solid var(--border-soft);
-  background: var(--surface-bg);
-  box-shadow: var(--shadow-strong);
-  padding: 18px;
-}
-
-.contact-modal h3 {
-  color: var(--pkg-heading);
-  font-size: 24px;
-  margin-bottom: 8px;
-}
-
-.contact-modal p {
-  color: var(--pkg-muted);
-  margin-bottom: 14px;
-}
-
-.contact-modal-actions {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.modal-action {
-  border: 1px solid var(--border-soft);
-  border-radius: 999px;
-  padding: 9px 10px;
-  text-align: center;
-  color: var(--pkg-heading);
-  background: var(--surface-muted);
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.modal-action:hover {
-  border-color: var(--primary-gold);
-  color: var(--primary-gold);
-}
-
-.modal-action--primary {
-  background: var(--primary-gold);
-  border-color: var(--primary-gold);
-  color: var(--white);
-}
-
-.modal-action--primary:hover {
-  color: var(--white);
-  filter: brightness(1.04);
-}
-
-.contact-modal-close {
-  margin-top: 12px;
-  border: 1px solid var(--border-soft);
-  border-radius: 10px;
-  background: transparent;
-  color: var(--pkg-muted);
-  padding: 8px 11px;
-  font-family: inherit;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.contact-modal-close:hover {
-  border-color: var(--primary-gold);
-  color: var(--primary-gold);
+  margin-top: 2px;
+  flex: 0 0 auto;
 }
 
 .footer-bottom {
@@ -947,8 +861,5 @@ body.theme-dark .luxury-page {
     height: 40px;
   }
 
-  .contact-modal-actions {
-    grid-template-columns: 1fr;
-  }
 }
 

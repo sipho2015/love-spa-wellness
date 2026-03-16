@@ -123,9 +123,11 @@
           <li><span>&#10022;</span> <a href="tel:+263789652298">+263 789 652 298</a></li>
           <li>
             <span>&#10022;</span>
-            <button type="button" class="contact-chooser-btn" (click)="openContactChooser()">Contact Us</button>
+            <a href="https://wa.me/263789652298?text=Hello%20Love%20Spa%20%26%20Wellness" target="_blank" rel="noopener noreferrer">
+              WhatsApp Chat
+            </a>
           </li>
-          <li><span>&#10022;</span> Victoria falls Zim</li>
+          <li><span>&#10022;</span> Victoria Falls, Zimbabwe</li>
         </ul>
       </section>
 
@@ -149,33 +151,5 @@
     </div>
   </footer>
 
-  @if (contactChooserOpen) {
-  <div class="contact-modal-overlay" (click)="closeContactChooser()">
-    <section
-      class="contact-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Choose contact method"
-      (click)="$event.stopPropagation()"
-    >
-      <h3>Choose Contact Method</h3>
-      <p>How would you like to reach Love Spa & Wellness?</p>
-      <div class="contact-modal-actions">
-        <a href="tel:+263789652298" class="modal-action" (click)="closeContactChooser()">Call</a>
-        <a href="sms:+263789652298" class="modal-action" (click)="closeContactChooser()">Text</a>
-        <a
-          href="https://wa.me/263789652298?text=Hello%20Love%20Spa%20%26%20Wellness"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="modal-action modal-action--primary"
-          (click)="closeContactChooser()"
-        >
-          WhatsApp
-        </a>
-      </div>
-      <button type="button" class="contact-modal-close" (click)="closeContactChooser()">Close</button>
-    </section>
-  </div>
-  }
 </div>
 

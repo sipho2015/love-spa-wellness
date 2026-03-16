@@ -32,6 +32,7 @@
         }
         <a routerLink="/services" routerLinkActive="active">Services</a>
         <a routerLink="/about" routerLinkActive="active">About</a>
+        <a [routerLink]="['/']" fragment="contact">Contact</a>
       </nav>
       } @else {
       <div class="backoffice-spacer" aria-hidden="true"></div>
@@ -149,8 +150,12 @@
         <ul class="info-list">
           <li><a href="mailto:siphomoyo893@gmail.com">siphomoyo893@gmail.com</a></li>
           <li><a href="tel:+263789652298">+263 789 652 298</a></li>
-          <li><button type="button" class="contact-chooser-btn" (click)="openContactChooser()">Contact Us</button></li>
-          <li>Victoria falls Zim</li>
+          <li>
+            <a href="https://wa.me/263789652298?text=Hello%20Love%20Spa%20%26%20Wellness" target="_blank" rel="noopener noreferrer">
+              WhatsApp Chat
+            </a>
+          </li>
+          <li>Victoria Falls, Zimbabwe</li>
         </ul>
       </section>
 
@@ -205,33 +210,5 @@
   </footer>
   }
 
-  @if (contactChooserOpen()) {
-  <div class="contact-modal-overlay" (click)="closeContactChooser()">
-    <section
-      class="contact-modal ui-surface"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Choose contact method"
-      (click)="$event.stopPropagation()"
-    >
-      <h3>Choose Contact Method</h3>
-      <p>How would you like to reach Love Spa & Wellness?</p>
-      <div class="contact-modal-actions">
-        <a href="tel:+263789652298" class="ui-btn ui-btn-muted" (click)="closeContactChooser()">Call</a>
-        <a href="sms:+263789652298" class="ui-btn ui-btn-muted" (click)="closeContactChooser()">Text</a>
-        <a
-          href="https://wa.me/263789652298?text=Hello%20Love%20Spa%20%26%20Wellness"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="ui-btn ui-btn-primary"
-          (click)="closeContactChooser()"
-        >
-          WhatsApp
-        </a>
-      </div>
-      <button type="button" class="contact-modal-close" (click)="closeContactChooser()">Close</button>
-    </section>
-  </div>
-  }
 </div>
 
