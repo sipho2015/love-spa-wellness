@@ -416,7 +416,6 @@ body.theme-dark .luxury-page {
   .intro-grid { grid-template-columns: 1fr; }
   .packages-grid { grid-template-columns: 1fr; gap: 18px; }
 }
-<<<<<<< HEAD
 
 @media (max-width: 560px) {
   .container {
@@ -495,4 +494,421 @@ body.theme-dark .luxury-page {
   }
 }
 =======
->>>>>>> 0f944b450fc21000f2c3adeda753a4af6c702efe
+1| :host {
+2|   --shadow-card: var(--shadow-soft);
+3|   --shadow-card-hover: var(--shadow-strong);
+4| }
+5| .luxury-page {
+6|   font-family: 'Poppins', sans-serif;
+7|   color: var(--dark-charcoal);
+8|   --pkg-text: #2a231d;
+9|   --pkg-muted: #5f554a;
+10|   --pkg-heading: #201a14;
+11|   background: radial-gradient(circle at 8% 2%, rgba(198, 168, 91, 0.1), transparent 32%),
+12|     linear-gradient(180deg, var(--surface-bg) 0%, var(--light-bg) 100%);
+13|   line-height: 1.65;
+14| }
+15| .luxury-page *,
+16| .container {
+17|   box-sizing: border-box;
+18| }
+19| .site-header {
+20|   position: sticky;
+21|   top: 0;
+22|   z-index: 1000;
+23|   background: var(--surface-bg);
+24|   border-bottom: 1px solid transparent;
+25| }
+26| .header-inner {
+27|   min-height: 86px;
+28|   display: flex;
+29|   align-items: center;
+30|   gap: 24px;
+31| }
+32| .logo {
+33|   font-family: 'Playfair Display', serif;
+34|   font-size: 24px;
+35|   font-weight: 600;
+36|   color: var(--dark-charcoal);
+37| }
+38| .site-nav {
+39|   flex: 1;
+40|   display: flex;
+41|   justify-content: center;
+42| }
+43| .nav-list {
+44|   display: flex;
+45|   align-items: center;
+46|   gap: 26px;
+47| }
+48| .nav-list a {
+49|   color: var(--pkg-heading);
+50|   font-weight: 500;
+51|   font-size: 15px;
+52|   position: relative;
+53| }
+54| .nav-list a:hover {
+55|   color: var(--primary-gold);
+56| }
+57| .header-actions {
+58|   display: flex;
+59|   align-items: center;
+60|   gap: 14px;
+61|   margin-left: auto;
+62| }
+63| .search-btn {
+64|   width: 40px;
+65|   height: 40px;
+66|   border: 1px solid var(--border-soft);
+67|   border-radius: 50%;
+68|   background: var(--surface-bg);
+69|   display: inline-flex;
+70|   align-items: center;
+71|   justify-content: center;
+72| }
+73| .book-btn {
+74|   background: var(--primary-gold);
+75|   color: var(--white);
+76|   padding: 11px 20px;
+77|   border-radius: 999px;
+78|   font-size: 14px;
+79|   font-weight: 600;
+80| }
+81| .hero {
+82|   position: relative;
+83|   min-height: 100vh;
+84|   width: 100vw;
+85|   margin-inline: calc(50% - 50vw);
+86|   padding: clamp(96px, 12vh, 140px) 20px clamp(72px, 9vh, 110px);
+87|   background:
+88|     linear-gradient(140deg, rgba(20, 17, 14, 0.78) 0%, rgba(20, 17, 14, 0.48) 48%, rgba(20, 17, 14, 0.22) 100%),
+89|     url('https://cdn.pixabay.com/photo/2016/08/11/02/23/massage-therapy-1584711_1280.jpg')
+90|       center / cover no-repeat;
+91|   display: flex;
+92|   align-items: center;
+93|   justify-content: center;
+94| }
+95| .hero-overlay {
+96|   position: absolute;
+97|   inset: 0;
+98| }
+99| .hero-content {
+100|   position: relative;
+101|   z-index: 2;
+102|   width: min(940px, 100%);
+103|   margin: 0 auto;
+104|   padding: 24px;
+105|   text-align: center;
+106|   color: #fffaf2;
+107|   display: grid;
+108|   justify-items: center;
+109|   gap: 14px;
+110| }
+111| .intro-strip {
+112|   margin-top: 0;
+113|   padding: 54px 0;
+114|   background: linear-gradient(180deg, rgba(198, 168, 91, 0.06), rgba(198, 168, 91, 0));
+115| }
+116| .intro-grid {
+117|   display: grid;
+118|   grid-template-columns: repeat(2, 1fr);
+119|   gap: 30px;
+120| }
+121| .packages-section {
+122|   background: linear-gradient(180deg, rgba(198, 168, 91, 0.08), rgba(198, 168, 91, 0.02)), var(--light-bg);
+123|   padding: 80px 0;
+124| }
+125| .section-heading {
+126|   text-align: center;
+127|   margin-bottom: 42px;
+128| }
+129| .packages-grid {
+130|   display: grid;
+131|   grid-template-columns: repeat(3, 1fr);
+132|   gap: 30px;
+133| }
+134| .package-card {
+135|   background: var(--surface-bg);
+136|   border: 1px solid var(--border-soft);
+137|   border-radius: 8px;
+138|   box-shadow: var(--shadow-card);
+139|   overflow: hidden;
+140|   position: relative;
+141| }
+142| .card-media img {
+143|   width: 100%;
+144|   height: 220px;
+145|   object-fit: cover;
+146| }
+147| .price-badge {
+148|   position: absolute;
+149|   top: 15px;
+150|   right: 15px;
+151|   width: 60px;
+152|   height: 60px;
+153|   border-radius: 50%;
+154|   background: var(--primary-gold);
+155|   color: var(--white);
+156|   display: flex;
+157|   align-items: center;
+158|   justify-content: center;
+159|   font-size: 16px;
+160|   font-weight: 600;
+161| }
+162| .card-content {
+163|   padding: 20px;
+164| }
+165| .card-content h3 {
+166|   font-size: 20px;
+167|   margin-bottom: 10px;
+168|   color: var(--pkg-heading);
+169| }
+170| .card-content p {
+171|   font-size: 14px;
+172|   margin-bottom: 16px;
+173|   color: var(--pkg-text);
+174| }
+175| .price-line {
+176|   display: flex;
+177|   align-items: center;
+178|   gap: 10px;
+179|   margin-bottom: 12px;
+180| }
+181| .original-price {
+182|   color: var(--pkg-muted);
+183|   text-decoration: line-through;
+184|   font-size: 13px;
+185| }
+186| .savings {
+187|   color: var(--accent-text-strong);
+188|   font-size: 13px;
+189|   font-weight: 600;
+190| }
+191| .includes {
+192|   margin: 0 0 16px;
+193|   padding: 0;
+194|   list-style: none;
+195|   display: grid;
+196|   gap: 6px;
+197| }
+198| .includes li {
+199|   font-size: 13px;
+200|   color: var(--pkg-text);
+201|   padding-left: 14px;
+202|   position: relative;
+203| }
+204| .card-content a {
+205|   color: #8b6c24;
+206|   font-size: 14px;
+207|   font-weight: 600;
+208| }
+209| .package-card:hover {
+210|   transform: translateY(-8px);
+211|   box-shadow: var(--shadow-card-hover);
+212| }
+213| .promo-section {
+214|   padding: 80px 0;
+215|   background: linear-gradient(180deg, var(--surface-bg), var(--surface-muted));
+216| }
+217| 
+218| .promo-grid {
+219|   display: grid;
+220|   grid-template-columns: repeat(2, 1fr);
+221|   gap: 30px;
+222| }
+223| 
+224| .promo-card {
+225|   height: 300px;
+226|   border-radius: 10px;
+227|   overflow: hidden;
+228|   background-size: cover;
+229|   background-position: center;
+230|   display: flex;
+231|   flex-direction: column;
+232|   justify-content: center;
+233|   padding: 34px;
+234|   color: var(--white);
+235| }
+236| 
+237| .promo-card p {
+238|   color: rgba(255, 255, 255, 0.9);
+239|   font-size: 14px;
+240|   margin-bottom: 8px;
+241| }
+242| 
+243| .promo-card h3 {
+244|   color: var(--white);
+245|   font-size: 32px;
+246|   max-width: 270px;
+247|   margin-bottom: 10px;
+248| }
+249| 
+250| .promo-summary {
+251|   max-width: 380px;
+252|   margin-bottom: 10px !important;
+253|   font-size: 14px !important;
+254|   line-height: 1.5;
+255| }
+256| 
+257| .promo-meta {
+258|   margin-bottom: 16px !important;
+259|   font-size: 14px !important;
+260|   color: rgba(255, 255, 255, 0.95) !important;
+261| }
+262| 
+263| .promo-meta span {
+264|   opacity: 0.9;
+265| }
+266| 
+267| .promo-card a {
+268|   align-self: flex-start;
+269|   background: var(--primary-gold);
+270|   color: var(--white);
+271|   padding: 10px 20px;
+272|   border-radius: 999px;
+273|   font-size: 14px;
+274|   font-weight: 600;
+275| }
+276| 
+277| .promo-card:hover {
+278|   transform: translateY(-6px);
+279|   background-size: 106%;
+280|   filter: brightness(0.95);
+281| }
+282| 
+283| /* ==========================================
+284|    7. FOOTER
+285| .site-footer {
+286|   background: var(--footer-bg);
+287|   padding: 60px 0 0;
+288| }
+289| 
+290| .footer-grid {
+291|   display: grid;
+292|   grid-template-columns: repeat(4, 1fr);
+293|   gap: 30px;
+294| }
+295| 
+296| .site-footer h4 {
+297|   color: var(--white);
+298|   font-size: 22px;
+299|   margin-bottom: 14px;
+300| }
+301| 
+302| .site-footer p,
+303| .site-footer li,
+304| .site-footer a {
+305|   color: var(--footer-text);
+306|   font-size: 14px;
+307| }
+308| 
+309| .site-footer a:hover {
+310|   color: var(--primary-gold);
+311| }
+312| 
+313| .subscribe-form {
+314|   margin-top: 14px;
+315|   display: flex;
+316|   gap: 10px;
+317| }
+318| 
+319| .subscribe-form input {
+320|   flex: 1;
+321|   background: var(--footer-input-bg);
+322|   border: 1px solid var(--footer-input-border);
+323|   color: var(--white);
+324|   padding: 10px 12px;
+325|   border-radius: 6px;
+326|   outline: none;
+327| }
+328| 
+329| .subscribe-form input:focus {
+330|   border-color: var(--primary-gold);
+331| }
+332| 
+333| .subscribe-form button {
+334|   background: var(--primary-gold);
+335|   border: 0;
+336|   color: var(--white);
+337|   padding: 0 14px;
+338|   border-radius: 6px;
+339|   cursor: pointer;
+340| }
+341| 
+342| .subscribe-form button:hover {
+343|   filter: brightness(1.05);
+344| }
+345| 
+346| .info-list {
+347|   display: grid;
+348|   gap: 10px;
+349| }
+350| 
+351| .info-list li {
+352|   margin-bottom: 0;
+353|   display: flex;
+354|   align-items: flex-start;
+355|   gap: 8px;
+356|   line-height: 1.45;
+357| }
+358| 
+359| .info-list span {
+360|   color: var(--primary-gold);
+361|   margin-top: 2px;
+362|   flex: 0 0 auto;
+363| }
+364| 
+365| .footer-bottom {
+366|   margin-top: 40px;
+367|   padding: 18px 20px;
+368|   border-top: 1px solid var(--footer-border);
+369|   text-align: center;
+370| }
+371| 
+372| .footer-bottom p {
+373|   color: var(--footer-subtle);
+374|   font-size: 13px;
+375| }
+376| 
+377| .footer-links a {
+378|   color: var(--footer-text);
+379| }
+380| 
+381| .footer-links a:hover {
+382|   color: var(--primary-gold);
+383| }
+384| 
+385| /* ==========================================
+386|    8. TOAST
+387| .toast {
+388|   position: fixed;
+389|   right: 18px;
+390|   bottom: 18px;
+391|   z-index: 1200;
+392|   background: var(--toast-bg);
+393|   color: var(--white);
+394|   padding: 10px 14px;
+395|   border-radius: 8px;
+396|   font-size: 13px;
+397|   box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+398| }
+399| 
+400| body.theme-dark .luxury-page {
+401|   --pkg-text: #f8e8d2;
+402|   --pkg-muted: #e3d0bb;
+403|   --pkg-heading: #fff2df;
+404| }
+405| 
+406| /* ==========================================
+407|    9. RESPONSIVENESS
+408| @media (max-width: 1024px) {
+409|   .packages-grid { grid-template-columns: repeat(2, 1fr); }
+410| }
+411| @media (max-width: 768px) {
+412|   .packages-section { padding: 60px 0; }
+413|   .section-heading { margin-bottom: 28px; }
+414|   .section-heading h2 { font-size: 34px; }
+415|   .hero h1 { font-size: 36px; }
+416|   .intro-grid { grid-template-columns: 1fr; }
+417|   .packages-grid { grid-template-columns: 1fr; gap: 18px; }
+418| }
